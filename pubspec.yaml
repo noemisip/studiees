@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+
   flutter:
     sdk: flutter
 
@@ -64,6 +65,8 @@ flutter:
   assets:
     - lib/assets/langs/
     - lib/assets/images/
+    - lib/assets/images/raster/
+
 
 
 

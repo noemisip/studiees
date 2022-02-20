@@ -61,6 +61,12 @@ class RegisterPage extends HookWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
                           contentPadding: EdgeInsets.all(10),
                           filled: true,
                           hintText: tr("firstname"),
@@ -85,6 +91,12 @@ class RegisterPage extends HookWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
                           contentPadding: EdgeInsets.all(10),
                           filled: true,
                           hintText: tr("lastname"),
@@ -108,6 +120,12 @@ class RegisterPage extends HookWidget {
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                            ),
                           ),
                           contentPadding: EdgeInsets.all(10),
                           filled: true,
@@ -134,6 +152,12 @@ class RegisterPage extends HookWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
                           contentPadding: EdgeInsets.all(10),
                           filled: true,
                           hintText: "Password",
@@ -157,6 +181,12 @@ class RegisterPage extends HookWidget {
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                            ),
                           ),
                           contentPadding: EdgeInsets.all(10),
                           filled: true,
@@ -182,6 +212,12 @@ class RegisterPage extends HookWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
                           contentPadding: EdgeInsets.all(10),
                           filled: true,
                           hintText: "Birthday",
@@ -205,6 +241,12 @@ class RegisterPage extends HookWidget {
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                            ),
                           ),
                           contentPadding: EdgeInsets.all(10),
                           filled: true,

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "329937069001",
+    "project_id": "studiees-2aee2",
+    "storage_bucket": "studiees-2aee2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329937069001:android:38325f932cc67006d33e18",
+        "android_client_info": {
+          "package_name": "com.example.stud_iees"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329937069001-4njll014srp9m1eo7nisdk2s1g4d46fn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4C2wn7oKMEWj6gpcQGT1i4XYmcUvUjP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329937069001-4njll014srp9m1eo7nisdk2s1g4d46fn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "329937069001-n5vm0nimihm7bc24b9vd92losbr8fmn3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.studiees"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

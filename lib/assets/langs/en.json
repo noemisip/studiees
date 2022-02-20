@@ -1,0 +1,18 @@
+{
+  "login": "Login",
+  "username": "Username",
+  "password": "Password",
+  "or": "Or",
+  "register": "Register",
+  "en": "en",
+  "hu": "hu",
+  "email": "E-mail",
+  "birthday": "Birthday",
+  "university": "University",
+  "role": "Role",
+  "student": "Student",
+  "teacher": "Teacher",
+  "firstname":"First name",
+  "lastname": "Last name"
+
+}

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'app_router.dart';
+import 'colors.dart';
 
 
 String initScreen = "/";
@@ -33,6 +34,11 @@ class MyApp extends StatelessWidget {
 
 
     return MaterialApp(
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+            cursorColor: MyColors.background1
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,

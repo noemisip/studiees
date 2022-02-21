@@ -1,3 +1,17 @@
 {
-
+  "login": "Bejelentkezés",
+  "username": "Felhasználó név",
+  "password": "Jelszó",
+  "or": "Vagy",
+  "register": "Regisztráció",
+  "en": "en",
+  "hu": "hu",
+  "email": "E-mail",
+  "birthday": "Születésnap",
+  "university": "Egyetem",
+  "role": "Szerep",
+  "student": "Diák",
+  "teacher": "Tanár",
+  "firstname":"Keresztnév",
+  "lastname": "Vezetéknév"
 }

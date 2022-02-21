@@ -27,9 +27,9 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _RegisterPageState extends State<MyStatefulWidget>  {
 
+  bool state = false;
   @override
   Widget build(BuildContext context) {
-    bool state = false;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: MyColors.background1,

@@ -11,7 +11,8 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  //await Firebase.initializeApp();
+ // await Firebase.initializeApp();
+ // FirebaseFirestore.instance.settings = Settings(host: 'localhost:8080', sslEnabled: false, persistenceEnabled: false);
 
   runApp(EasyLocalization(
       path: "lib/assets/langs",

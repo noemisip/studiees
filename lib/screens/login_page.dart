@@ -160,7 +160,6 @@ class LoginPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               AppRouter.register, (route) => false);
-
                         },
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         borderRadius: BorderRadius.all(const Radius.circular(20)),

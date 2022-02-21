@@ -13,5 +13,6 @@
   "student": "Diák",
   "teacher": "Tanár",
   "firstname":"Keresztnév",
-  "lastname": "Vezetéknév"
+  "lastname": "Vezetéknév",
+  "choose_date": "Válassz Dátumot"
 }

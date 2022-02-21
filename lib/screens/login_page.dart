@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
                       ),
                       onPressed: () {
-                        context.locale = Locale('hu');
+                        context.locale = const Locale('hu');
                       },
                     ),
                   ],
@@ -68,15 +68,15 @@ class LoginPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 5),
+                          padding: const EdgeInsets.only(left: 5),
                           child: Text(tr("username"),
                               style:
-                                  TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
+                                 const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
                         ),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                       child: TextField(
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -92,7 +92,7 @@ class LoginPage extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            contentPadding: EdgeInsets.all(10),
+                            contentPadding: const EdgeInsets.all(10),
                             filled: true,
                             hintText: tr("username"),
                             fillColor: Colors.white),
@@ -102,15 +102,15 @@ class LoginPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 5),
+                          padding: const EdgeInsets.only(left: 5),
                           child: Text(tr("password"),
                               style:
-                                  TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
+                                  const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
                         ),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                       child: TextField(
                         obscureText: true,
                         decoration: InputDecoration(
@@ -127,14 +127,14 @@ class LoginPage extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            contentPadding: EdgeInsets.all(10),
+                            contentPadding: const EdgeInsets.all(10),
                             filled: true,
                             hintText: tr("password"),
                             fillColor: Colors.white),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: CupertinoButton(
                         child: Text(
                           tr("login"),
@@ -143,14 +143,14 @@ class LoginPage extends StatelessWidget {
                         color: Colors.white,
                         onPressed: () {
                         },
-                        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        borderRadius: BorderRadius.all(const Radius.circular(20)),
                       ),
                     ),
                     Text(tr("or"),
-                        style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600)),
+                        style: const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600)),
                     Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: CupertinoButton(
                         child: Text(
                           tr("register"),
@@ -162,8 +162,8 @@ class LoginPage extends StatelessWidget {
                               AppRouter.register, (route) => false);
 
                         },
-                        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        borderRadius: BorderRadius.all(const Radius.circular(20)),
                       ),
                     )
                   ],

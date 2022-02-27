@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stud_iees/helpers/picturehelper.dart';
@@ -6,8 +7,20 @@ import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class LoginPage extends StatelessWidget {
+
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  final _auth = FirebaseAuth.instance;
+  var email = TextEditingController();
+  var password = TextEditingController();
+  String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +82,7 @@ class LoginPage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 5),
-                          child: Text(tr("username"),
+                          child: Text(tr("email"),
                               style:
                                  const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
                         ),
@@ -77,7 +90,8 @@ class LoginPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                      child: TextField(
+                      child: TextFormField(
+                        controller: email,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30.0),
@@ -94,8 +108,11 @@ class LoginPage extends StatelessWidget {
                             ),
                             contentPadding: const EdgeInsets.all(10),
                             filled: true,
-                            hintText: tr("username"),
+                            hintText: tr("email"),
                             fillColor: Colors.white),
+                        onSaved: (value) {
+                          email.text = value!;
+                        },
                       ),
                     ),
                     Row(
@@ -111,7 +128,8 @@ class LoginPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                      child: TextField(
+                      child: TextFormField(
+                        controller: password,
                         obscureText: true,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -131,6 +149,9 @@ class LoginPage extends StatelessWidget {
                             filled: true,
                             hintText: tr("password"),
                             fillColor: Colors.white),
+                        onSaved: (value) {
+                          password.text = value!;
+                        },
                       ),
                     ),
                     Padding(
@@ -142,6 +163,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         color: Colors.white,
                         onPressed: () {
+                          signIn(email.text, password.text);
                         },
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         borderRadius: BorderRadius.all(const Radius.circular(20)),
@@ -172,4 +194,42 @@ class LoginPage extends StatelessWidget {
           ),
         ));
   }
+
+  void signIn(String email, String password) async {
+      try {
+        await _auth
+            .signInWithEmailAndPassword(email: email, password: password)
+            .then((uid) => {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRouter.home, (route) => false)
+        });
+      } on FirebaseAuthException catch (error) {
+        switch (error.code) {
+          case "invalid-email":
+            errorMessage = "Your email address appears to be malformed.";
+
+            break;
+          case "wrong-password":
+            errorMessage = "Your password is wrong.";
+            break;
+          case "user-not-found":
+            errorMessage = "User with this email doesn't exist.";
+            break;
+          case "user-disabled":
+            errorMessage = "User with this email has been disabled.";
+            break;
+          case "too-many-requests":
+            errorMessage = "Too many requests";
+            break;
+          case "operation-not-allowed":
+            errorMessage = "Signing in with Email and Password is not enabled.";
+            break;
+          default:
+            errorMessage = "An undefined Error happened.";
+        }
+        print(error.code);
+      }
+    }
+
+
 }

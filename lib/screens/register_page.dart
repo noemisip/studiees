@@ -1,17 +1,14 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:stud_iees/helpers/picturehelper.dart';
 import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
-
-
 import '../entities/user.dart';
-import '../entities/user_dao.dart';
 import '../my_date.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -32,32 +29,20 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<MyStatefulWidget>  {
+class _RegisterPageState extends State<MyStatefulWidget> {
+  final _auth = FirebaseAuth.instance;
+  String? errorMessage;
 
   var firstname = TextEditingController();
   var lastname = TextEditingController();
-  var name = TextEditingController();
   var university = TextEditingController();
   var username = TextEditingController();
   var password = TextEditingController();
   var email = TextEditingController();
   var birthdate = SelectedDate();
   bool role = false;
-  var userDao = UserDao();
 
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-  Future<void> addUserTest() {
-    // Call the user's CollectionReference to add a new user
-    return users
-        .add({
-      'full_name': "Noemi", // John Doe
-      'company': "BME", // Stokes and Sons
-      'age': 22 // 42
-    })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
+  //CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +102,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: TextField(
+                    child: TextFormField(
                       controller: firstname,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -130,13 +115,17 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: MyColors.background1, width: 2.0),
+                            borderSide: BorderSide(
+                                color: MyColors.background1, width: 2.0),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           contentPadding: const EdgeInsets.all(10),
                           filled: true,
                           hintText: tr("firstname"),
                           fillColor: Colors.white),
+                      onSaved: (value) {
+                        firstname.text = value!;
+                      },
                     ),
                   ),
                   Row(
@@ -154,27 +143,30 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: TextField(
-                      controller: lastname,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                    child: TextFormField(
+                        controller: lastname,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: MyColors.background1, width: 2.0),
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          contentPadding: const EdgeInsets.all(10),
-                          filled: true,
-                          hintText: tr("lastname"),
-                          fillColor: Colors.white),
-                    ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyColors.background1, width: 2.0),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            contentPadding: const EdgeInsets.all(10),
+                            filled: true,
+                            hintText: tr("lastname"),
+                            fillColor: Colors.white),
+                        onSaved: (value) {
+                          lastname.text = value!;
+                        }),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -191,27 +183,30 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: TextField(
-                      controller: username,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                    child: TextFormField(
+                        controller: username,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: MyColors.background1, width: 2.0),
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          contentPadding: const EdgeInsets.all(10),
-                          filled: true,
-                          hintText: tr("username"),
-                          fillColor: Colors.white),
-                    ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyColors.background1, width: 2.0),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            contentPadding: const EdgeInsets.all(10),
+                            filled: true,
+                            hintText: tr("username"),
+                            fillColor: Colors.white),
+                        onSaved: (value) {
+                          username.text = value!;
+                        }),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -228,28 +223,31 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: TextField(
-                      controller: password,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                    child: TextFormField(
+                        controller: password,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: MyColors.background1, width: 2.0),
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          contentPadding: const EdgeInsets.all(10),
-                          filled: true,
-                          hintText: tr("password"),
-                          fillColor: Colors.white),
-                    ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyColors.background1, width: 2.0),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            contentPadding: const EdgeInsets.all(10),
+                            filled: true,
+                            hintText: tr("password"),
+                            fillColor: Colors.white),
+                        onSaved: (value) {
+                          password.text = value!;
+                        }),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -266,27 +264,30 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: TextField(
-                      controller: email,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                    child: TextFormField(
+                        controller: email,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: MyColors.background1, width: 2.0),
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          contentPadding: const EdgeInsets.all(10),
-                          filled: true,
-                          hintText: tr("email"),
-                          fillColor: Colors.white),
-                    ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyColors.background1, width: 2.0),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            contentPadding: const EdgeInsets.all(10),
+                            filled: true,
+                            hintText: tr("email"),
+                            fillColor: Colors.white),
+                        onSaved: (value) {
+                          email.text = value!;
+                        }),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -320,27 +321,30 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: TextField(
-                      controller: university,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                    child: TextFormField(
+                        controller: university,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: MyColors.background1, width: 2.0),
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          contentPadding: const EdgeInsets.all(10),
-                          filled: true,
-                          hintText: tr("university"),
-                          fillColor: Colors.white),
-                    ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyColors.background1, width: 2.0),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            contentPadding: const EdgeInsets.all(10),
+                            filled: true,
+                            hintText: tr("university"),
+                            fillColor: Colors.white),
+                        onSaved: (value) {
+                          university.text = value!;
+                        }),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -392,9 +396,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                       ),
                       color: Colors.white,
                       onPressed: () {
-                        /*userDao.createUser(User(0,username.text,firstname.text + " " + lastname.text,
-                            email.text,password.text,birthdate.selectedDate.millisecondsSinceEpoch,university.text,role));*/
-                        addUserTest();
+                        signUp(email.text, password.text);
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -405,5 +407,62 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
             ),
           ),
         ));
+  }
+
+  void signUp(String email, String password) async {
+    try {
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {postDetailsToFirestore()});
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "invalid-email":
+          errorMessage = "Your email address appears to be malformed.";
+          break;
+        case "wrong-password":
+          errorMessage = "Your password is wrong.";
+          break;
+        case "user-not-found":
+          errorMessage = "User with this email doesn't exist.";
+          break;
+        case "user-disabled":
+          errorMessage = "User with this email has been disabled.";
+          break;
+        case "too-many-requests":
+          errorMessage = "Too many requests";
+          break;
+        case "operation-not-allowed":
+          errorMessage = "Signing in with Email and Password is not enabled.";
+          break;
+        default:
+          errorMessage = "An undefined Error happened.";
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(errorMessage!),
+      ));
+      print(e);
+    }
+  }
+
+  postDetailsToFirestore() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
+
+    UserModel userModel = UserModel();
+
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+    userModel.username = username.text;
+    userModel.name = firstname.text + " " + lastname.text;
+    userModel.email = email.text;
+    userModel.role = role;
+    userModel.university = university.text;
+    userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
+    userModel.password = password.text;
+
+    await firebaseFirestore
+        .collection("Users")
+        .doc(user.uid)
+        .set(userModel.toMap());
   }
 }

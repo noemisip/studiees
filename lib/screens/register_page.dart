@@ -1,10 +1,16 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:stud_iees/helpers/picturehelper.dart';
 import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+
+import '../entities/user.dart';
+import '../entities/user_dao.dart';
 import '../my_date.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -27,7 +33,17 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _RegisterPageState extends State<MyStatefulWidget>  {
 
-  bool state = false;
+  var firstname = TextEditingController();
+  var lastname = TextEditingController();
+  var name = TextEditingController();
+  var university = TextEditingController();
+  var username = TextEditingController();
+  var password = TextEditingController();
+  var email = TextEditingController();
+  var birthdate = SelectedDate();
+  bool role = false;
+  var userDao = UserDao();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +103,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                     child: TextField(
+                      controller: firstname,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -123,6 +140,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                     child: TextField(
+                      controller: lastname,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -159,6 +177,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                     child: TextField(
+                      controller: username,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -195,6 +214,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                     child: TextField(
+                      controller: password,
                       obscureText: true,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -232,6 +252,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                     child: TextField(
+                      controller: email,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -285,6 +306,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                     child: TextField(
+                      controller: university,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -329,13 +351,12 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600))),
                       CupertinoSwitch(
-                          value: state,
+                          value: role,
                           activeColor: MyColors.background1,
                           onChanged: (value) {
                             setState(() {
-                              state = value;
+                              role = value;
                             });
-                            print(state);
                           }),
                       Padding(
                           padding: const EdgeInsets.all(20),
@@ -355,7 +376,10 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                             color: Colors.black, fontWeight: FontWeight.w600),
                       ),
                       color: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        userDao.createUser(User(0,username.text,firstname.text + " " + lastname.text,
+                            email.text,password.text,birthdate.selectedDate.millisecondsSinceEpoch,university.text,role));
+                      },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                     ),

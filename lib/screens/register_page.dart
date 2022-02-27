@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +44,20 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
   var birthdate = SelectedDate();
   bool role = false;
   var userDao = UserDao();
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+  Future<void> addUserTest() {
+    // Call the user's CollectionReference to add a new user
+    return users
+        .add({
+      'full_name': "Noemi", // John Doe
+      'company': "BME", // Stokes and Sons
+      'age': 22 // 42
+    })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -377,8 +392,9 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                       ),
                       color: Colors.white,
                       onPressed: () {
-                        userDao.createUser(User(0,username.text,firstname.text + " " + lastname.text,
-                            email.text,password.text,birthdate.selectedDate.millisecondsSinceEpoch,university.text,role));
+                        /*userDao.createUser(User(0,username.text,firstname.text + " " + lastname.text,
+                            email.text,password.text,birthdate.selectedDate.millisecondsSinceEpoch,university.text,role));*/
+                        addUserTest();
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),

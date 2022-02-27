@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:stud_iees/helpers/picturehelper.dart';
+import 'package:stud_iees/widget/my_dialog.dart';
 import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../entities/user.dart';
-import '../my_date.dart';
+import '../widget/my_date.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -41,8 +40,6 @@ class _RegisterPageState extends State<MyStatefulWidget> {
   var email = TextEditingController();
   var birthdate = SelectedDate();
   bool role = false;
-
-  //CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +88,7 @@ class _RegisterPageState extends State<MyStatefulWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 5),
+                        padding: const  EdgeInsets.only(left: 5),
                         child: Text(tr("firstname"),
                             style: const TextStyle(
                                 fontSize: 15,
@@ -397,6 +394,7 @@ class _RegisterPageState extends State<MyStatefulWidget> {
                       color: Colors.white,
                       onPressed: () {
                         signUp(email.text, password.text);
+
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -416,6 +414,9 @@ class _RegisterPageState extends State<MyStatefulWidget> {
           .then((value) => {postDetailsToFirestore()});
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
+        case "weak-password":
+          errorMessage = "Password should be at least 6 characters";
+              break;
         case "invalid-email":
           errorMessage = "Your email address appears to be malformed.";
           break;
@@ -437,9 +438,7 @@ class _RegisterPageState extends State<MyStatefulWidget> {
         default:
           errorMessage = "An undefined Error happened.";
       }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(errorMessage!),
-      ));
+     showErrorMessage(context, errorMessage!);
       print(e);
     }
   }
@@ -464,5 +463,8 @@ class _RegisterPageState extends State<MyStatefulWidget> {
         .collection("Users")
         .doc(user.uid)
         .set(userModel.toMap());
+
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRouter.login, (route) => false);
   }
 }

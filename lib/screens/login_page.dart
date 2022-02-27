@@ -7,6 +7,8 @@ import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../widget/my_dialog.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,11 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(backgroundColor: MyColors.background1, title: Container(
-          alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height,
-            width: 50,
-            child: IntrinsicWidth(child: Image.asset(Images.pngImgPath('sun'))))),
+      resizeToAvoidBottomInset: false,
+        appBar: AppBar(backgroundColor: MyColors.background1),
         body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -67,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Image.asset(Images.pngImgPath('sun')),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -207,7 +207,6 @@ class _LoginPageState extends State<LoginPage> {
         switch (error.code) {
           case "invalid-email":
             errorMessage = "Your email address appears to be malformed.";
-
             break;
           case "wrong-password":
             errorMessage = "Your password is wrong.";
@@ -227,6 +226,7 @@ class _LoginPageState extends State<LoginPage> {
           default:
             errorMessage = "An undefined Error happened.";
         }
+        showErrorMessage(context, errorMessage!);
         print(error.code);
       }
     }

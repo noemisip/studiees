@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stud_iees/screens/home_screen.dart';
+import 'package:stud_iees/screens/home_page.dart';
+import 'package:stud_iees/screens/info_screen.dart';
 import 'package:stud_iees/screens/login_page.dart';
 import 'package:stud_iees/screens/register_page.dart';
 
@@ -24,7 +25,7 @@ class AppRouter {
       case register:
         return MaterialPageRoute(builder: (context) => const RegisterPage(),settings: routeSettings);
       case home:
-        return MaterialPageRoute(builder: (context) => const HomePage(),settings: routeSettings);
+        return MaterialPageRoute(builder: (context) => const HomeScreen(),settings: routeSettings);
 
     }
     throw AssertionError("Path not matched");

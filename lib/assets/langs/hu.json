@@ -14,5 +14,6 @@
   "teacher": "Tanár",
   "firstname":"Keresztnév",
   "lastname": "Vezetéknév",
-  "choose_date": "Válassz Dátumot"
+  "choose_date": "Válassz Dátumot",
+  "info": "Info"
 }

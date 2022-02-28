@@ -50,7 +50,7 @@ class _HomeScreenState extends State<_HomeScreen> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: MyColors.tabBarColor,
+        backgroundColor: MyColors.background1,
         unselectedItemColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[

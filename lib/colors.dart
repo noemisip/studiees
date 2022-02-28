@@ -6,6 +6,7 @@ class MyColors {
   static Color background2 = const Color.fromRGBO(255, 128, 128, 1);
   static Color dialogcolor = const Color.fromRGBO(255, 128, 128, 0.6);
   static Color tabBarColor = const Color.fromRGBO(170, 128, 255, 0.5);
-  static Color selectedColor = const Color.fromRGBO(194, 112, 153, 0.7);
+  static Color selectedColor = const Color.fromRGBO(
+      255, 194, 226, 1.0);
 
 }

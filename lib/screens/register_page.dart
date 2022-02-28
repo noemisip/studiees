@@ -67,6 +67,7 @@ class _RegisterPageState extends State<MyStatefulWidget> {
                   end: Alignment.bottomRight,
                   colors: [MyColors.background1, MyColors.background2])),
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
               child: Column(

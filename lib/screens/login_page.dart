@@ -27,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
         appBar: AppBar(backgroundColor: MyColors.background1),
         body: Container(
           decoration: BoxDecoration(
@@ -36,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
                   end: Alignment.bottomRight,
                   colors: [MyColors.background1, MyColors.background2])),
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: Colors.transparent,
             body: Column(
               children: [

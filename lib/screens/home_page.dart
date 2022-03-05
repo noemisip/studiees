@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stud_iees/colors.dart';
 import 'package:stud_iees/screens/info_screen.dart';
-import 'package:stud_iees/screens/login_page.dart';
+import 'package:stud_iees/screens/subjects_page.dart';
+
+import 'add_subject.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,10 +32,13 @@ class _HomeScreenState extends State<_HomeScreen> {
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Scaffold(
-      body: InfoPage(),
+      body: SubjectPage(),
     ),
     Scaffold(
       body: InfoPage(),
+    ),
+    Scaffold(
+      body: AddPage(),
     ),
   ];
 
@@ -61,6 +66,10 @@ class _HomeScreenState extends State<_HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.info),
             label: 'Info',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'New subject',
           ),
         ],
         currentIndex: _selectedIndex,

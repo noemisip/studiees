@@ -15,6 +15,11 @@
   "firstname":"First name",
   "lastname": "Last name",
   "choose_date": "Choose Date",
-  "info": "Info"
+  "info": "Info",
+  "name": "Name",
+  "add_subject": "Add new subject",
+  "limit": "Student limit",
+  "credit": "Credit",
+  "semester": "Semester"
 
 }

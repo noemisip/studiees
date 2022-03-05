@@ -8,5 +8,7 @@ class MyColors {
   static Color tabBarColor = const Color.fromRGBO(170, 128, 255, 0.5);
   static Color selectedColor = const Color.fromRGBO(
       255, 194, 226, 1.0);
+  static Color infocolor = const Color.fromRGBO(
+      255, 173, 173, 0.6784313725490196);
 
 }

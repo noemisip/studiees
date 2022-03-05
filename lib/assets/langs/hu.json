@@ -15,5 +15,10 @@
   "firstname":"Keresztnév",
   "lastname": "Vezetéknév",
   "choose_date": "Válassz Dátumot",
-  "info": "Info"
+  "info": "Info",
+  "name": "Név",
+  "add_subject": "Új tantárgy hozzáadása",
+  "limit": "Férőhely",
+  "credit": "Kredit",
+  "semester": "Semester"
 }

@@ -20,5 +20,10 @@
   "add_subject": "Új tantárgy hozzáadása",
   "limit": "Férőhely",
   "credit": "Kredit",
-  "semester": "Semester"
+  "semester": "Semester",
+  "subjects": "Tantárgyak",
+  "registry": "Tárgyfelvétel",
+  "diary": "Napló",
+  "new_subject": "Új tárgy",
+  "tasks": "Feladatok"
 }

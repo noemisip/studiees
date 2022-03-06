@@ -20,6 +20,12 @@
   "add_subject": "Add new subject",
   "limit": "Student limit",
   "credit": "Credit",
-  "semester": "Semester"
+  "semester": "Semester",
+  "subjects": "Subjects",
+  "registry": "Registry",
+  "diary": "Diary",
+  "new_subject": "New subject",
+  "tasks": "Tasks"
+
 
 }

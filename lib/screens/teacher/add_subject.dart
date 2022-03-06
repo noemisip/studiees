@@ -4,11 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
+import 'package:stud_iees/adapter/user_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
-import '../colors.dart';
+import '../../app_router.dart';
+import '../../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import '../entities/user.dart';
+import '../../entities/user.dart';
 
 
 class AddPage extends StatefulWidget {
@@ -28,7 +30,8 @@ class _AddPageState extends State<AddPage> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   String? errorMessage;
-  SubjectAdapter adapter = SubjectAdapter();
+  SubjectAdapter subjectAdapter = SubjectAdapter();
+  UserAdapter userAdapter = UserAdapter();
 
   @override
   void initState() {
@@ -46,7 +49,17 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(backgroundColor: MyColors.background1),
+        appBar:  AppBar(
+        backgroundColor: MyColors.background1,
+        centerTitle: true,
+        title: Text(tr('add_subject'),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w800)),
+        leading: CupertinoButton(
+            onPressed: () {
+              userAdapter.logout(context);
+            },
+            child: const Icon(Icons.logout, color: Colors.white,))),
         body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -272,6 +285,6 @@ class _AddPageState extends State<AddPage> {
       semester.clear();
     }
     );
-    adapter.getSubjects();
+    subjectAdapter.getSubjects();
   }
 }

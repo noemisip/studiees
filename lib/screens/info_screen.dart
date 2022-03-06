@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
-import '../app_router.dart';
+import '../adapter/user_adapter.dart';
 import '../colors.dart';
 import '../entities/user.dart';
 import '../widget/my_text.dart';
@@ -21,6 +21,7 @@ class _InfoPageState extends State<InfoPage> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  UserAdapter userAdapter = UserAdapter();
 
   @override
   void initState() {
@@ -46,7 +47,7 @@ class _InfoPageState extends State<InfoPage> {
                   color: Colors.white, fontWeight: FontWeight.w800)),
           leading: CupertinoButton(
               onPressed: () {
-                logout(context);
+                userAdapter.logout(context);
               },
               child: const Icon(Icons.logout, color: Colors.white,))),
       body: Container(
@@ -124,11 +125,5 @@ class _InfoPageState extends State<InfoPage> {
         ),
       ),
     );
-  }
-
-  Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut().whenComplete(() =>  Navigator.of(context, rootNavigator: true)
-        .pushNamedAndRemoveUntil(
-        AppRouter.login, (route) => false));
   }
 }

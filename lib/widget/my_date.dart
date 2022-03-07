@@ -35,19 +35,21 @@ class _MyDateState extends State<MyDate> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        CupertinoButton(
-          child: Text(tr("choose_date"),
-              style: const TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.w600)),
-          color: Colors.white,
-          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          onPressed: () {
-            showDatePicker();
-          },
+        Padding(
+          padding: const EdgeInsets.only(right: 15),
+          child: CupertinoButton(
+            child: Text(tr("choose_date"),
+                style: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.w600)),
+            color: Colors.white,
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            onPressed: () {
+              showDatePicker();
+            },
+          ),
         ),
-        SizedBox(
-          width: 90,
+        Expanded(
           child: TextField(
             style: const TextStyle(
                 fontSize: 15,

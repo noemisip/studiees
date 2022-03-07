@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '../app_router.dart';
-import '../entities/subject.dart';
 import '../entities/user.dart';
 import '../widget/my_dialog.dart';
 

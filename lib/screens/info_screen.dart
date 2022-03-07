@@ -32,7 +32,6 @@ class _InfoPageState extends State<InfoPage> {
         .get()
         .then((value) {
       loggedInUser = UserModel.fromMap(value.data());
-      setState(() {});
     });
   }
 

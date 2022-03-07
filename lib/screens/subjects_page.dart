@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,7 @@ import 'package:stud_iees/widget/my_text.dart';
 import '../adapter/user_adapter.dart';
 import '../app_router.dart';
 import '../colors.dart';
+import '../entities/user.dart';
 import '../widget/rounded_shadow_view.dart';
 
 class SubjectPage extends StatefulWidget {
@@ -22,12 +24,21 @@ class SubjectPage extends StatefulWidget {
 class _SubjectPageState extends State<SubjectPage> {
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
 
   @override
-  void initState() {
+   initState()  {
     super.initState();
-    subjectAdapter = context.read<SubjectAdapter>();
-    subjectAdapter.getSubjects();
+   FirebaseFirestore.instance
+        .collection("Users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      subjectAdapter = context.read<SubjectAdapter>();
+      subjectAdapter.getSubjectsById(loggedInUser.uid!);
+    });
   }
 
   @override
@@ -84,8 +95,8 @@ class SubjectItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            MyText(text: subject.name ?? ""),
-            MyText(text: subject.credit.toString() + tr("credit")),
+            Expanded(child: MyText(text: subject.name ?? "")),
+            MyText(text: subject.credit.toString() +" " + tr("credit")),
             MyText(
                 text: subject.current_part.toString() +
                     "/" +

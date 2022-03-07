@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/adapter/user_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
-import '../../app_router.dart';
 import '../../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -76,20 +75,10 @@ class _AddPageState extends State<AddPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(tr("add_subject"),
-                                  style: const TextStyle(
-                                      fontSize: 30, color: Colors.white, fontWeight: FontWeight.w700))),
-                        ],
-                      ),
-                      Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 5),
+                            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                             child: Text(tr("name"),
                                 style:
                                 const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
@@ -242,7 +231,7 @@ class _AddPageState extends State<AddPage> {
                         child: CupertinoButton(
                           child: const Text(
                             "Ok",
-                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
                           ),
                           color: Colors.white,
                           onPressed: () {
@@ -285,6 +274,6 @@ class _AddPageState extends State<AddPage> {
       semester.clear();
     }
     );
-    subjectAdapter.getSubjects();
+    subjectAdapter.getSubjectsById(subjectModel.tid!);
   }
 }

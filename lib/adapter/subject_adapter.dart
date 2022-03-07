@@ -9,9 +9,9 @@ class SubjectAdapter extends ChangeNotifier {
 
   List<SubjectModel> subjects = [];
 
-  Future<void> getSubjects() async {
+  Future<void> getSubjectsById( String id) async {
     List<SubjectModel> temp = [];
-    await firebaseFirestore.collection("Subjects").get().then((querySnapshot) {
+    await firebaseFirestore.collection("Subjects").where("tid", isEqualTo: id).get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);

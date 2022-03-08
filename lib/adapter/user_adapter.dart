@@ -7,10 +7,11 @@ import '../widget/my_dialog.dart';
 
 class UserAdapter extends ChangeNotifier {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  User? user = FirebaseAuth.instance.currentUser;
+  //User? user = FirebaseAuth.instance.currentUser;
   String? errorMessage;
   final _auth = FirebaseAuth.instance;
   List<UserModel> users = [];
+  late UserModel currentUser;
 
   Future<void> getUsers() async {
     List<UserModel> temp = [];
@@ -25,26 +26,50 @@ class UserAdapter extends ChangeNotifier {
     notifyListeners();
   }
 
-  UserModel getUsersById()  {
+  postDetailsToFirestore(BuildContext context, UserModel userModel) async {
 
+    User? user = _auth.currentUser;
+
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+
+    await firebaseFirestore
+        .collection("Users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
+  }
+
+  Future getUserById() async {
+    User? user = _auth.currentUser;
     UserModel loggedInUser = UserModel();
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("Users")
         .doc(user!.uid)
         .get()
         .then((value) {
       loggedInUser = UserModel.fromMap(value.data());
     });
-    return loggedInUser;
+    currentUser = loggedInUser;
   }
 
   void signIn(String email, String password, BuildContext context) async {
     try {
       await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
+          .signInWithEmailAndPassword(email: email, password: password).whenComplete(() => getUserById())
           .then((uid) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  AppRouter.teacher_home, (route) => false);
+              if (currentUser.role == true)
+                {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRouter.teacher_home, (route) => false);
+                }
+              else
+                {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRouter.student_home, (route) => false);
+                }
       });
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
@@ -75,10 +100,8 @@ class UserAdapter extends ChangeNotifier {
   }
 
   Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut().whenComplete(() =>  Navigator.of(context, rootNavigator: true)
-        .pushNamedAndRemoveUntil(
-        AppRouter.login, (route) => false));
+    await FirebaseAuth.instance.signOut().whenComplete(() =>
+        Navigator.of(context, rootNavigator: true)
+            .pushNamedAndRemoveUntil(AppRouter.login, (route) => false));
   }
-
-
 }

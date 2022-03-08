@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../entities/user.dart';
 import '../widget/my_date.dart';
-
+import '../adapter/user_adapter.dart';
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
@@ -31,7 +30,8 @@ class MyStatefulWidget extends StatefulWidget {
 class _RegisterPageState extends State<MyStatefulWidget> {
   final _auth = FirebaseAuth.instance;
   String? errorMessage;
-
+  UserModel userModel = UserModel();
+  UserAdapter userAdapter = UserAdapter();
   var firstname = TextEditingController();
   var lastname = TextEditingController();
   var university = TextEditingController();
@@ -394,8 +394,16 @@ class _RegisterPageState extends State<MyStatefulWidget> {
                       ),
                       color: Colors.white,
                       onPressed: () {
-                        signUp(email.text, password.text);
 
+                        userModel.username = username.text;
+                        userModel.name = firstname.text + " " + lastname.text;
+                        userModel.email = email.text;
+                        userModel.role = role;
+                        userModel.university = university.text;
+                        userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
+                        userModel.password = password.text;
+
+                        signUp(email.text, password.text, userModel);
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -408,11 +416,11 @@ class _RegisterPageState extends State<MyStatefulWidget> {
         ));
   }
 
-  void signUp(String email, String password) async {
+  void signUp(String email, String password, UserModel userModel) async {
     try {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {postDetailsToFirestore()});
+          .then((value) => {userAdapter.postDetailsToFirestore(context,userModel)});
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "weak-password":
@@ -442,30 +450,5 @@ class _RegisterPageState extends State<MyStatefulWidget> {
      showErrorMessage(context, errorMessage!);
       print(e);
     }
-  }
-
-  postDetailsToFirestore() async {
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = _auth.currentUser;
-
-    UserModel userModel = UserModel();
-
-    userModel.email = user!.email;
-    userModel.uid = user.uid;
-    userModel.username = username.text;
-    userModel.name = firstname.text + " " + lastname.text;
-    userModel.email = email.text;
-    userModel.role = role;
-    userModel.university = university.text;
-    userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
-    userModel.password = password.text;
-
-    await firebaseFirestore
-        .collection("Users")
-        .doc(user.uid)
-        .set(userModel.toMap());
-
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRouter.login, (route) => false);
   }
 }

@@ -35,6 +35,8 @@ class _SubjectPageState extends State<SubjectPage> {
         .doc(user!.uid)
         .get()
         .then((value) {
+     setState(() {
+     });
       loggedInUser = UserModel.fromMap(value.data());
       subjectAdapter = context.read<SubjectAdapter>();
       subjectAdapter.getSubjectsById(loggedInUser.uid!);

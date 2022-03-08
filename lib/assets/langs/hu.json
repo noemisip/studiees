@@ -25,5 +25,10 @@
   "registry": "Tárgyfelvétel",
   "diary": "Napló",
   "new_subject": "Új tárgy",
-  "tasks": "Feladatok"
+  "tasks": "Feladatok",
+  "invalid-email": "Érvénytelen e-mail cím",
+  "wrong-password": "Rossz jelszó",
+  "user-not-found": "Nem létezik ilyen e-mail címmel felhasználó",
+  "user-disabled": "Ez a felhasználó le lett tiltva ",
+  "undefined-error": "Hiba történt"
 }

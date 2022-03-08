@@ -25,7 +25,13 @@
   "registry": "Registry",
   "diary": "Diary",
   "new_subject": "New subject",
-  "tasks": "Tasks"
+  "tasks": "Tasks",
+  "invalid-email": "Your email address appears to be malformed.",
+  "wrong-password": "Your password is wrong.",
+  "user-not-found": "User with this email doesn't exist.",
+  "user-disabled": "User with this email has been disabled.",
+  "undefined-error": "An undefined Error happened."
+
 
 
 }

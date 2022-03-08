@@ -401,9 +401,9 @@ class _RegisterPageState extends State<MyStatefulWidget> {
                         userModel.role = role;
                         userModel.university = university.text;
                         userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
-                        userModel.password = password.text;
+                        //userModel.password = password.text;
 
-                        signUp(email.text, password.text, userModel);
+                        userAdapter.signUp(email.text, password.text, userModel, context);
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -414,41 +414,5 @@ class _RegisterPageState extends State<MyStatefulWidget> {
             ),
           ),
         ));
-  }
-
-  void signUp(String email, String password, UserModel userModel) async {
-    try {
-      await _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {userAdapter.postDetailsToFirestore(context,userModel)});
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "weak-password":
-          errorMessage = "Password should be at least 6 characters";
-              break;
-        case "invalid-email":
-          errorMessage = "Your email address appears to be malformed.";
-          break;
-        case "wrong-password":
-          errorMessage = "Your password is wrong.";
-          break;
-        case "user-not-found":
-          errorMessage = "User with this email doesn't exist.";
-          break;
-        case "user-disabled":
-          errorMessage = "User with this email has been disabled.";
-          break;
-        case "too-many-requests":
-          errorMessage = "Too many requests";
-          break;
-        case "operation-not-allowed":
-          errorMessage = "Signing in with Email and Password is not enabled.";
-          break;
-        default:
-          errorMessage = "An undefined Error happened.";
-      }
-     showErrorMessage(context, errorMessage!);
-      print(e);
-    }
   }
 }

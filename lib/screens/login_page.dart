@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.white, fontWeight: FontWeight.w800),
                       ),
                       onPressed: () {
-                        context.locale = Locale('en');
+                        context.locale = const Locale('en');
                       },
                     ),
                     const Text("/", style: TextStyle(color: Colors.white)),
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(Images.pngImgPath('sun')),
+                    Image.asset(Images.pngImgPath('mortarboard')),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                          userAdapter.signIn(email.text, password.text,context);
                         },
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        borderRadius: BorderRadius.all(const Radius.circular(20)),
+                        borderRadius: const BorderRadius.all(Radius.circular(20)),
                       ),
                     ),
                     Text(tr("or"),
@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                               AppRouter.register, (route) => false);
                         },
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        borderRadius: BorderRadius.all(const Radius.circular(20)),
+                        borderRadius: const BorderRadius.all(Radius.circular(20)),
                       ),
                     )
                   ],

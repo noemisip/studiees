@@ -9,7 +9,12 @@ Future showErrorMessage (BuildContext context, String text) {
       builder: (context) {
         return AlertDialog(
           backgroundColor: MyColors.dialogcolor,
-          title: Text(text,style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(child: Text(text,style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
+            ],
+          ),
           actions: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

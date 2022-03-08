@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '../app_router.dart';
@@ -7,7 +8,6 @@ import '../widget/my_dialog.dart';
 
 class UserAdapter extends ChangeNotifier {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  //User? user = FirebaseAuth.instance.currentUser;
   String? errorMessage;
   final _auth = FirebaseAuth.instance;
   List<UserModel> users = [];
@@ -27,7 +27,6 @@ class UserAdapter extends ChangeNotifier {
   }
 
   postDetailsToFirestore(BuildContext context, UserModel userModel) async {
-
     User? user = _auth.currentUser;
 
     userModel.email = user!.email;
@@ -42,66 +41,86 @@ class UserAdapter extends ChangeNotifier {
         .pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
   }
 
-  Future getUserById() async {
+  Future getUserById(BuildContext context) async {
     User? user = _auth.currentUser;
-    UserModel loggedInUser = UserModel();
-    await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-    });
-    currentUser = loggedInUser;
+    if (user != null) {
+      UserModel loggedInUser = UserModel();
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(user.uid)
+          .get()
+          .then((value) {
+        loggedInUser = UserModel.fromMap(value.data());
+      });
+      currentUser = loggedInUser;
+    }
+  }
+
+  String? chooseErrorMessage( String error){
+    switch(error){
+      case "invalid-email":
+        errorMessage = tr("invalid-email");
+        return errorMessage;
+      case "wrong-password":
+        errorMessage = tr("wrong-password");
+        return errorMessage;
+      case "user-not-found":
+        errorMessage = tr("user-not-found");
+        return errorMessage;
+      case "user-disabled":
+        errorMessage = tr("user-disabled");
+        return errorMessage;
+      case "too-many-requests":
+        errorMessage = tr("undefined-error");
+        return errorMessage;
+      case "operation-not-allowed":
+        errorMessage = tr("undefined-error");
+        return errorMessage;
+      default:
+        errorMessage = tr("undefined-error");
+        return errorMessage;
+    }
   }
 
   void signIn(String email, String password, BuildContext context) async {
     try {
       await _auth
-          .signInWithEmailAndPassword(email: email, password: password).whenComplete(() => getUserById())
+          .signInWithEmailAndPassword(email: email, password: password)
+          .whenComplete(() => getUserById(context))
           .then((uid) {
-              if (currentUser.role == true)
-                {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRouter.teacher_home, (route) => false);
-                }
-              else
-                {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRouter.student_home, (route) => false);
-                }
+        if (currentUser.role == true) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRouter.teacher_home, (route) => false);
+        }
+        else {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRouter.student_home, (route) => false);
+        }
       });
     } on FirebaseAuthException catch (error) {
-      switch (error.code) {
-        case "invalid-email":
-          errorMessage = "Your email address appears to be malformed.";
-          break;
-        case "wrong-password":
-          errorMessage = "Your password is wrong.";
-          break;
-        case "user-not-found":
-          errorMessage = "User with this email doesn't exist.";
-          break;
-        case "user-disabled":
-          errorMessage = "User with this email has been disabled.";
-          break;
-        case "too-many-requests":
-          errorMessage = "Too many requests";
-          break;
-        case "operation-not-allowed":
-          errorMessage = "Signing in with Email and Password is not enabled.";
-          break;
-        default:
-          errorMessage = "An undefined Error happened.";
-      }
+      chooseErrorMessage(error.code);
       showErrorMessage(context, errorMessage!);
       print(error.code);
     }
   }
 
+
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut().whenComplete(() =>
         Navigator.of(context, rootNavigator: true)
             .pushNamedAndRemoveUntil(AppRouter.login, (route) => false));
+  }
+
+
+  void signUp(String email, String password, UserModel userModel,
+      BuildContext context) async {
+    try {
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {postDetailsToFirestore(context, userModel)});
+    } on FirebaseAuthException catch (error) {
+      chooseErrorMessage(error.code);
+      showErrorMessage(context, errorMessage!);
+    }
   }
 }

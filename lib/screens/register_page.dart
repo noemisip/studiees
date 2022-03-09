@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stud_iees/helpers/picturehelper.dart';
 import 'package:stud_iees/widget/my_dialog.dart';
+import 'package:stud_iees/widget/my_picker.dart';
 import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -51,7 +52,7 @@ class _RegisterPageState extends State<MyStatefulWidget> {
               height: MediaQuery.of(context).size.height,
               width: 50,
               child:
-                  IntrinsicWidth(child: Image.asset(Images.pngImgPath('sun')))),
+                  IntrinsicWidth(child: Image.asset(Images.pngImgPath('mortarboard')))),
           leading: CupertinoNavigationBarBackButton(
             color: Colors.white,
             onPressed: () {

@@ -7,9 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
+import 'package:stud_iees/widget/my_picker.dart';
 import 'package:stud_iees/widget/my_text.dart';
 import '../adapter/user_adapter.dart';
-import '../app_router.dart';
 import '../colors.dart';
 import '../entities/user.dart';
 import '../widget/rounded_shadow_view.dart';
@@ -39,7 +39,12 @@ class _SubjectPageState extends State<SubjectPage> {
      });
       loggedInUser = UserModel.fromMap(value.data());
       subjectAdapter = context.read<SubjectAdapter>();
-      subjectAdapter.getSubjectsById(loggedInUser.uid!);
+      if(loggedInUser.role == true){
+        subjectAdapter.getSubjectsById(loggedInUser.uid!);
+      }
+      else{
+        subjectAdapter.getSubjectsByUniversity(loggedInUser);
+      }
     });
   }
 
@@ -66,18 +71,25 @@ class _SubjectPageState extends State<SubjectPage> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [MyColors.background1, MyColors.background2])),
-        child:  Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Consumer<SubjectAdapter>(
-                  builder: (context, subjectadapter, child) => subjectAdapter.subjects.isEmpty
-                      ? const LoadingIndicator()
-                      : ListView.builder(
-                      itemCount: subjectAdapter.subjects.length ?? 0,
-                      padding: EdgeInsets.all(20),
-                      itemBuilder: (context, index) =>
-                          SubjectItem(subject: subjectAdapter.subjects[index])),
-                ),
-              ),
+        child:  Column(
+          children: [
+            MyPicker(),
+            Expanded(
+              child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: Consumer<SubjectAdapter>(
+                        builder: (context, subjectAdapter,child) => subjectAdapter.subjects.isEmpty
+                            ? const LoadingIndicator()
+                            : ListView.builder(
+                            itemCount: subjectAdapter.subjects.length ?? 0,
+                            padding: const EdgeInsets.all(20),
+                            itemBuilder: (context, index) =>
+                                SubjectItem(subject: subjectAdapter.subjects[index])),
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

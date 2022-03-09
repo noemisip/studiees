@@ -7,8 +7,9 @@ class UserModel {
  int? birthdate;
  String? university;
  bool? role;
+ String? currentSemester;
 
- UserModel({this.uid,this.username,this.name, this.email,this.birthdate, this.university,this.role});
+ UserModel({this.uid,this.username,this.name, this.email,this.birthdate, this.university,this.role, this.currentSemester});
 
  // receiving data from server
  factory UserModel.fromMap(map) {
@@ -20,6 +21,7 @@ class UserModel {
    birthdate: map['birthdate'],
    university: map['university'],
    role: map['role'],
+   currentSemester: map['current_semester']
   );
  }
 
@@ -33,6 +35,7 @@ class UserModel {
    'birthdate': birthdate,
    'university': university,
    'role': role,
+   'current_semester': currentSemester,
   };
  }
 }

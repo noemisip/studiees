@@ -54,6 +54,55 @@ class UserAdapter extends ChangeNotifier {
       });
       currentUser = loggedInUser;
     }
+    notifyListeners();
+  }
+
+  void changeCurrentSemester(UserModel user, BuildContext context){
+    FirebaseFirestore.instance.collection("Users").doc(user.uid).update(
+      user.toMap()
+    );
+   // getUserById(context);
+    notifyListeners();
+  }
+
+  void signIn(String email, String password, BuildContext context) async {
+    try {
+      await _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .whenComplete(() => getUserById(context))
+          .then((uid) {
+        if (currentUser.role == true) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRouter.teacher_home, (route) => false);
+        }
+        else {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRouter.student_home, (route) => false);
+        }
+      });
+    } on FirebaseAuthException catch (error) {
+      chooseErrorMessage(error.code);
+      showErrorMessage(context, errorMessage!);
+      print(error.code);
+    }
+  }
+
+  void signUp(String email, String password, UserModel userModel,
+      BuildContext context) async {
+    try {
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {postDetailsToFirestore(context, userModel)});
+    } on FirebaseAuthException catch (error) {
+      chooseErrorMessage(error.code);
+      showErrorMessage(context, errorMessage!);
+    }
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut().whenComplete(() =>
+        Navigator.of(context, rootNavigator: true)
+            .pushNamedAndRemoveUntil(AppRouter.login, (route) => false));
   }
 
   String? chooseErrorMessage( String error){
@@ -79,48 +128,6 @@ class UserAdapter extends ChangeNotifier {
       default:
         errorMessage = tr("undefined-error");
         return errorMessage;
-    }
-  }
-
-  void signIn(String email, String password, BuildContext context) async {
-    try {
-      await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .whenComplete(() => getUserById(context))
-          .then((uid) {
-        if (currentUser.role == true) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRouter.teacher_home, (route) => false);
-        }
-        else {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRouter.student_home, (route) => false);
-        }
-      });
-    } on FirebaseAuthException catch (error) {
-      chooseErrorMessage(error.code);
-      showErrorMessage(context, errorMessage!);
-      print(error.code);
-    }
-  }
-
-
-  Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut().whenComplete(() =>
-        Navigator.of(context, rootNavigator: true)
-            .pushNamedAndRemoveUntil(AppRouter.login, (route) => false));
-  }
-
-
-  void signUp(String email, String password, UserModel userModel,
-      BuildContext context) async {
-    try {
-      await _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {postDetailsToFirestore(context, userModel)});
-    } on FirebaseAuthException catch (error) {
-      chooseErrorMessage(error.code);
-      showErrorMessage(context, errorMessage!);
     }
   }
 }

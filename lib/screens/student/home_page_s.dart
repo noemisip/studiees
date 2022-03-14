@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:stud_iees/colors.dart';
 import 'package:stud_iees/screens/info_screen.dart';
+import 'package:stud_iees/screens/student/signed_subjects_page.dart';
 import 'package:stud_iees/screens/subjects_page.dart';
 
 
@@ -32,10 +33,10 @@ class _HomeScreenState extends State<_HomeScreen> {
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Scaffold(
-      body: SubjectPage(),
+      body: SignedSubjectPage()
     ),
     Scaffold(
-      body: InfoPage(),
+      body: SubjectPage()
     ),
     Scaffold(
       body: InfoPage(),

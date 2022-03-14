@@ -252,8 +252,6 @@ class _AddPageState extends State<AddPage> {
 
   postSubjectToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = _auth.currentUser;
-    UserModel userModel = UserModel();
     SubjectModel subjectModel = SubjectModel();
 
     subjectModel.credit = int.parse(credit.text);
@@ -264,16 +262,15 @@ class _AddPageState extends State<AddPage> {
     subjectModel.current_part = 0;
     subjectModel.semester = semester.text;
 
-
-    await firebaseFirestore
-        .collection("Subjects").doc()
-        .set(subjectModel.toMap()).whenComplete(() {
+    DocumentReference docRef = await firebaseFirestore.collection('Subjects').add(subjectModel.toMap()).whenComplete(() {
       credit.clear();
       limit.clear();
       name.clear();
       semester.clear();
     }
     );
+    subjectModel.sid = docRef.id;
+    subjectAdapter.changeSubject(subjectModel, context);
     subjectAdapter.getSubjectsById(subjectModel.tid!);
   }
 }

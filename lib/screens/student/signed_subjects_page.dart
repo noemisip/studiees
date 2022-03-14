@@ -9,43 +9,38 @@ import 'package:stud_iees/entities/subject.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import 'package:stud_iees/widget/my_picker.dart';
 import 'package:stud_iees/widget/my_text.dart';
-import '../adapter/user_adapter.dart';
-import '../colors.dart';
-import '../entities/user.dart';
-import '../widget/rounded_shadow_view.dart';
+import '../../adapter/user_adapter.dart';
+import '../../colors.dart';
+import '../../entities/user.dart';
+import '../../widget/rounded_shadow_view.dart';
 
-class SubjectPage extends StatefulWidget {
-  const SubjectPage({Key? key}) : super(key: key);
+class SignedSubjectPage extends StatefulWidget {
+  const SignedSubjectPage({Key? key}) : super(key: key);
 
 
   @override
-  _SubjectPageState createState() => _SubjectPageState();
+  _SignedSubjectPageState createState() => _SignedSubjectPageState();
 }
 
 UserModel loggedInUser = UserModel();
 SubjectAdapter subjectAdapter = SubjectAdapter();
 UserAdapter userAdapter = UserAdapter();
 
-class _SubjectPageState extends State<SubjectPage> {
+class _SignedSubjectPageState extends State<SignedSubjectPage> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
-   initState()  {
+  initState()  {
     super.initState();
-   FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection("Users")
         .doc(user!.uid)
         .get()
         .then((value) {
-     setState(() {
-     });
+      setState(() {
+      });
       loggedInUser = UserModel.fromMap(value.data());
       subjectAdapter = context.read<SubjectAdapter>();
-      if(loggedInUser.role == true){
-        subjectAdapter.getSubjectsById(loggedInUser.uid!);
-      }
-      else if ( loggedInUser.role == false){
-        subjectAdapter.getSubjectsByUniversity(loggedInUser);
-      }
+      subjectAdapter.getSubjectsBySignedUp(loggedInUser);
     });
   }
 
@@ -77,17 +72,17 @@ class _SubjectPageState extends State<SubjectPage> {
             MyPicker(),
             Expanded(
               child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                      body: Consumer<SubjectAdapter>(
-                        builder: (context, subjectAdapter,child) => subjectAdapter.subjects.isEmpty
-                            ? const LoadingIndicator()
-                            : ListView.builder(
-                            itemCount: subjectAdapter.subjects.length ?? 0,
-                            padding: const EdgeInsets.all(20),
-                            itemBuilder: (context, index) =>
-                                SubjectItem(subject: subjectAdapter.subjects[index])),
-                      ),
-                    ),
+                backgroundColor: Colors.transparent,
+                body: Consumer<SubjectAdapter>(
+                  builder: (context, subjectAdapter,child) => subjectAdapter.subjects.isEmpty
+                      ? const LoadingIndicator()
+                      : ListView.builder(
+                      itemCount: subjectAdapter.subjects.length ?? 0,
+                      padding: const EdgeInsets.all(20),
+                      itemBuilder: (context, index) =>
+                          SubjectItem(subject: subjectAdapter.subjects[index])),
+                ),
+              ),
             ),
           ],
         ),
@@ -116,24 +111,20 @@ class SubjectItem extends StatelessWidget {
                 text: subject.current_part.toString() +
                     "/" +
                     subject.limit.toString()),
-            if(loggedInUser.role == false) Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: CupertinoButton(
-                    child: Text( "+",
-                      style: TextStyle(
-                          color: MyColors.background1, fontWeight: FontWeight.w600),
-                    ),
-                    color: Colors.white,
-                    onPressed: () {
-                      subjectAdapter.signUpSubject(subject, context);
-                    },
-                    padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  ),
+            Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: CupertinoButton(
+                child: Text( "-",
+                  style: TextStyle(
+                      color: MyColors.background1, fontWeight: FontWeight.w600),
                 ),
-              ],
+                color: Colors.white,
+                onPressed: () {
+                  subjectAdapter.signDownSubject(subject, context);
+                },
+                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+              ),
             ),
 
           ],

@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../adapter/subject_adapter.dart';
 import '../adapter/user_adapter.dart';
 import '../colors.dart';
@@ -30,6 +31,7 @@ class _MyPickerState extends State<MyPicker> {
   @override
   initState()  {
     super.initState();
+    subjectAdapter = context.read<SubjectAdapter>();
     userAdapter.getUserById(context);
   }
   @override
@@ -41,6 +43,7 @@ class _MyPickerState extends State<MyPicker> {
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CupertinoButton(
                         child: Text( "Choose semester",
@@ -78,7 +81,12 @@ class _MyPickerState extends State<MyPicker> {
                 setState(() {
                   userAdapter.currentUser.currentSemester = selectedValue;
                   userAdapter.changeCurrentSemester(userAdapter.currentUser,context);
-                  subjectAdapter.getSubjectsBySemester(userAdapter.currentUser);
+                  if(userAdapter.currentUser.role == true){
+                    subjectAdapter.getSubjectsByIdBySemester(userAdapter.currentUser);
+                  } else {
+                    subjectAdapter.getSubjectsBySemester(userAdapter.currentUser);
+                  }
+
                 });
               },
               itemExtent: 25,

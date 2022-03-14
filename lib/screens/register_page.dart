@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stud_iees/helpers/picturehelper.dart';
-import 'package:stud_iees/widget/my_dialog.dart';
-import 'package:stud_iees/widget/my_picker.dart';
 import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,7 +26,7 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<MyStatefulWidget> {
+class _RegisterPageState extends State<MyStatefulWidget>  {
   final _auth = FirebaseAuth.instance;
   String? errorMessage;
   UserModel userModel = UserModel();
@@ -402,8 +400,6 @@ class _RegisterPageState extends State<MyStatefulWidget> {
                         userModel.role = role;
                         userModel.university = university.text;
                         userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
-                        //userModel.password = password.text;
-
                         userAdapter.signUp(email.text, password.text, userModel, context);
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),

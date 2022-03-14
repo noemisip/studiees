@@ -12,6 +12,7 @@ class UserAdapter extends ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   List<UserModel> users = [];
   late UserModel currentUser;
+  List<String> subjects = [];
 
   Future<void> getUsers() async {
     List<UserModel> temp = [];
@@ -61,7 +62,21 @@ class UserAdapter extends ChangeNotifier {
     FirebaseFirestore.instance.collection("Users").doc(user.uid).update(
       user.toMap()
     );
-   // getUserById(context);
+    notifyListeners();
+  }
+
+  Future<void> addSubjectToUser(UserModel user, String sid, BuildContext context) async{
+    subjects.add(sid);
+    await firebaseFirestore.collection("Users").doc(user.uid).update({"subjects": FieldValue.arrayUnion(subjects)});
+    notifyListeners();
+  }
+
+  Future<void> removeSubjectFromUser(UserModel user, String sid, BuildContext context) async{
+    subjects.remove(sid);
+    List<String> removeable = [];
+    removeable.add(sid);
+    await firebaseFirestore.collection("Users").doc(user.uid).update({
+      'subjects': FieldValue.arrayRemove(removeable)});
     notifyListeners();
   }
 

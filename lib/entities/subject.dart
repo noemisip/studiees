@@ -7,8 +7,9 @@ class SubjectModel {
   String? university;
   String? tid;
   int? current_part;
+  String? sid;
 
- SubjectModel({this.name, this.limit, this.credit, this.semester, this.university, this.tid, this.current_part});
+ SubjectModel({this.name, this.limit, this.credit, this.semester, this.university, this.tid, this.current_part, this.sid});
 
   factory SubjectModel.fromMap(map) {
     return SubjectModel(
@@ -19,6 +20,7 @@ class SubjectModel {
       tid: map['tid'],
       current_part: map['currentpart'],
       semester: map['semester'],
+      sid: map['sid']
     );
   }
 
@@ -28,9 +30,10 @@ class SubjectModel {
       'limit': limit,
       'credit': credit,
       'university': university,
-      'semester': semester,
-      'currentpart': current_part,
       'tid': tid,
+      'currentpart': current_part,
+      'semester': semester,
+      'sid': sid
     };
   }
 }

@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 class UserModel {
  String? uid;
  String? username;
@@ -8,8 +10,9 @@ class UserModel {
  String? university;
  bool? role;
  String? currentSemester;
+ List<String>? subjects;
 
- UserModel({this.uid,this.username,this.name, this.email,this.birthdate, this.university,this.role, this.currentSemester});
+ UserModel({this.uid,this.username,this.name, this.email,this.birthdate, this.university,this.role, this.currentSemester, this.subjects});
 
  // receiving data from server
  factory UserModel.fromMap(map) {
@@ -21,7 +24,10 @@ class UserModel {
    birthdate: map['birthdate'],
    university: map['university'],
    role: map['role'],
-   currentSemester: map['current_semester']
+   currentSemester: map['current_semester'],
+   subjects: map["subjects"] == null
+       ? null : List<String>.from(map["subjects"]
+       .map((x) => x)),
   );
  }
 
@@ -36,6 +42,7 @@ class UserModel {
    'university': university,
    'role': role,
    'current_semester': currentSemester,
+   "subjects": subjects == null ? null : List<dynamic>.from(subjects!.map((x) => x)),
   };
  }
 }

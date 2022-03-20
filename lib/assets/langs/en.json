@@ -30,8 +30,10 @@
   "wrong-password": "Your password is wrong.",
   "user-not-found": "User with this email doesn't exist.",
   "user-disabled": "User with this email has been disabled.",
-  "undefined-error": "An undefined Error happened."
-
-
+  "undefined-error": "An undefined Error happened.",
+  "admin_page": "Admin page",
+  "add_new_semester": "Add new semester",
+  "yes": "Yes",
+  "no": "No"
 
 }

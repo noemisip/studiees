@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:stud_iees/colors.dart';
 import 'package:stud_iees/screens/info_screen.dart';
 import 'package:stud_iees/screens/subjects_page.dart';
-
 import 'add_subject.dart';
 
 class TeacherHomeScreen extends StatelessWidget {
@@ -39,7 +38,7 @@ class _HomeScreenState extends State<_HomeScreen> {
       body: AddPage(),
     ),
     Scaffold(
-      body: AddPage(),
+      body: InfoPage(),
     ),
     Scaffold(
       body: InfoPage(),

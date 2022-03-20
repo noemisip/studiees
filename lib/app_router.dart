@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stud_iees/screens/admin/admin_page.dart';
 import 'package:stud_iees/screens/student/home_page_s.dart';
 import 'package:stud_iees/screens/teacher/home_page_t.dart';
 import 'package:stud_iees/screens/info_screen.dart';
@@ -14,6 +15,7 @@ class AppRouter {
   static const register = "register";
   static const student_home = "studenthome";
   static const teacher_home = "teacherhome";
+  static const admin = "admin";
 
   static Route<dynamic> generator(RouteSettings routeSettings) {
 
@@ -30,6 +32,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => const TeacherHomeScreen(),settings: routeSettings);
       case student_home:
         return MaterialPageRoute(builder: (context) => const StudentHomeScreen(),settings: routeSettings);
+      case admin:
+        return MaterialPageRoute(builder: (context) => const AdminPage(),settings: routeSettings);
 
     }
     throw AssertionError("Path not matched");

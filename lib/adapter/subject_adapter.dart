@@ -112,6 +112,14 @@ class SubjectAdapter extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> addSubject(SubjectModel subject, BuildContext context) async{
+    DocumentReference docRef = await firebaseFirestore.collection('Subjects').add(subject.toMap());
+    subject.sid = docRef.id;
+    changeSubject(subject, context);
+    getSubjectsById(subject.tid!);
+    notifyListeners();
+  }
 }
 
 

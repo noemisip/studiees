@@ -39,6 +39,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
   var email = TextEditingController();
   var birthdate = SelectedDate();
   bool role = false;
+  bool admin = false;
 
   @override
   Widget build(BuildContext context) {
@@ -210,6 +211,46 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
+                        child: Text(tr("email"),
+                            style: const TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                    child: TextFormField(
+                        controller: email,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyColors.background1, width: 2.0),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            contentPadding: const EdgeInsets.all(10),
+                            filled: true,
+                            hintText: tr("email"),
+                            fillColor: Colors.white),
+                        onSaved: (value) {
+                          email.text = value!;
+                        }),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
                         child: Text(tr("password"),
                             style: const TextStyle(
                                 fontSize: 15,
@@ -244,46 +285,6 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                             fillColor: Colors.white),
                         onSaved: (value) {
                           password.text = value!;
-                        }),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text(tr("email"),
-                            style: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: TextFormField(
-                        controller: email,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: const BorderSide(
-                                color: Colors.white,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: MyColors.background1, width: 2.0),
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            contentPadding: const EdgeInsets.all(10),
-                            filled: true,
-                            hintText: tr("email"),
-                            fillColor: Colors.white),
-                        onSaved: (value) {
-                          email.text = value!;
                         }),
                   ),
                   Row(
@@ -383,6 +384,46 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                                   fontWeight: FontWeight.w600))),
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text("Admin",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(tr("no"),
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600))),
+                      CupertinoSwitch(
+                          value: admin,
+                          activeColor: MyColors.background1,
+                          onChanged: (value) {
+                            setState(() {
+                              admin = value;
+                            });
+                          }),
+                       Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(tr("yes"),
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600))),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: CupertinoButton(
@@ -393,11 +434,11 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                       ),
                       color: Colors.white,
                       onPressed: () {
-
                         userModel.username = username.text;
                         userModel.name = firstname.text + " " + lastname.text;
                         userModel.email = email.text;
                         userModel.role = role;
+                        userModel.admin = admin;
                         userModel.university = university.text;
                         userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
                         userAdapter.signUp(email.text, password.text, userModel, context);

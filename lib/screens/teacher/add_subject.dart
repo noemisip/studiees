@@ -10,6 +10,7 @@ import '../../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../entities/user.dart';
+import '../../widget/my_picker.dart';
 
 
 class AddPage extends StatefulWidget {
@@ -21,16 +22,16 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
 
-  final _auth = FirebaseAuth.instance;
   var name = TextEditingController();
   var limit = TextEditingController();
   var credit = TextEditingController();
-  var semester = TextEditingController();
+  //var semester = TextEditingController();
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   String? errorMessage;
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
+  var picker = SelectedValue();
 
   @override
   void initState() {
@@ -123,33 +124,7 @@ class _AddPageState extends State<AddPage> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                        child: TextFormField(
-                          controller: semester,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: MyColors.background1, width: 2.0),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                                borderSide: const BorderSide(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.all(10),
-                              filled: true,
-                              hintText: tr("semester"),
-                              fillColor: Colors.white),
-                          onSaved: (value) {
-                            semester.text = value!;
-                          },
-                        ),
-                      ),
+                  MyPicker(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -165,6 +140,7 @@ class _AddPageState extends State<AddPage> {
                         padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                         child: TextFormField(
                           controller: credit,
+                            keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -203,6 +179,7 @@ class _AddPageState extends State<AddPage> {
                         padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                         child: TextFormField(
                           controller: limit,
+                            keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -235,7 +212,23 @@ class _AddPageState extends State<AddPage> {
                           ),
                           color: Colors.white,
                           onPressed: () {
-                            postSubjectToFirestore();
+
+                            SubjectModel subjectModel = SubjectModel();
+                            subjectModel.credit = int.parse(credit.text);
+                            subjectModel.limit = int.parse(limit.text);
+                            subjectModel.tid = loggedInUser.uid;
+                            subjectModel.name = name.text;
+                            subjectModel.university = loggedInUser.university;
+                            subjectModel.current_part = 0;
+                            subjectModel.semester = picker.selectedValue;
+                            print(subjectModel.semester);
+
+                            subjectAdapter.addSubject(subjectModel, context).whenComplete(() {
+                            credit.clear();
+                            limit.clear();
+                            name.clear();
+                            });
+
                           },
                           padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                           borderRadius: BorderRadius.all(const Radius.circular(20)),
@@ -248,29 +241,5 @@ class _AddPageState extends State<AddPage> {
             ),
           ),
         ));
-  }
-
-  postSubjectToFirestore() async {
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    SubjectModel subjectModel = SubjectModel();
-
-    subjectModel.credit = int.parse(credit.text);
-    subjectModel.limit = int.parse(limit.text);
-    subjectModel.tid = loggedInUser.uid;
-    subjectModel.name = name.text;
-    subjectModel.university = loggedInUser.university;
-    subjectModel.current_part = 0;
-    subjectModel.semester = semester.text;
-
-    DocumentReference docRef = await firebaseFirestore.collection('Subjects').add(subjectModel.toMap()).whenComplete(() {
-      credit.clear();
-      limit.clear();
-      name.clear();
-      semester.clear();
-    }
-    );
-    subjectModel.sid = docRef.id;
-    subjectAdapter.changeSubject(subjectModel, context);
-    subjectAdapter.getSubjectsById(subjectModel.tid!);
   }
 }

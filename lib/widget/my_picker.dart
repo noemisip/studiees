@@ -1,41 +1,55 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../adapter/semester_adapter.dart';
 import '../adapter/subject_adapter.dart';
 import '../adapter/user_adapter.dart';
 import '../colors.dart';
 import 'my_text.dart';
 
+class SelectedValue extends ChangeNotifier {
+  String selectedValue = "";
+
+
+  changeValue(String value) {
+    selectedValue = value;
+  }
+
+  String getValue() {
+    return selectedValue;
+  }
+}
+
 class MyPicker extends StatefulWidget {
   const MyPicker({Key? key}) : super(key: key);
+
 
   @override
   _MyPickerState createState()
   {
     return _MyPickerState();
   }
+
 }
 
 class _MyPickerState extends State<MyPicker> {
-  List <Text> semesters = [
-    Text("2020/2021/1"),
-    Text("2020/2021/2"),
-    Text("2021/2022/1"),
-    Text("2021/2022/2"),
-  ];
-  String selectedValue = "";
+
+  SemesterAdapter semesterAdapter = SemesterAdapter();
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
+  var semester = SelectedValue();
 
   @override
   initState()  {
     super.initState();
     subjectAdapter = context.read<SubjectAdapter>();
+    semesterAdapter = context.read<SemesterAdapter>();
+    semesterAdapter.getSemesters();
     userAdapter.getUserById(context);
   }
   @override
   Widget build(BuildContext context) {
+
     return
       Column(
            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -61,7 +75,7 @@ class _MyPickerState extends State<MyPicker> {
                   ),
 
                 ),
-               MyText( text: selectedValue),
+               MyText( text: semester.selectedValue),
               ]
     );
   }
@@ -74,19 +88,20 @@ class _MyPickerState extends State<MyPicker> {
             height: MediaQuery.of(context).copyWith().size.height*0.25,
             color: Colors.white,
             child: CupertinoPicker(
-              children: semesters,
+              children: semesterAdapter.semesters.map((e) => Text(e.semester!)).toList(),
               onSelectedItemChanged: (value){
-                Text text = semesters[value];
-                selectedValue = text.data.toString();
+                Text text = semesterAdapter.semesters.map((e) => Text(e.semester!)).toList()[value];
+                semester.selectedValue = text.data.toString();
                 setState(() {
-                  userAdapter.currentUser.currentSemester = selectedValue;
+                  semester.changeValue( text.data.toString());
+                  print(semester.selectedValue);
+                  userAdapter.currentUser.currentSemester = semester.selectedValue;
                   userAdapter.changeCurrentSemester(userAdapter.currentUser,context);
                   if(userAdapter.currentUser.role == true){
                     subjectAdapter.getSubjectsByIdBySemester(userAdapter.currentUser);
                   } else {
                     subjectAdapter.getSubjectsBySemester(userAdapter.currentUser);
                   }
-
                 });
               },
               itemExtent: 25,

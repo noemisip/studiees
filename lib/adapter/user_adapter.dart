@@ -86,11 +86,16 @@ class UserAdapter extends ChangeNotifier {
           .signInWithEmailAndPassword(email: email, password: password)
           .whenComplete(() => getUserById(context))
           .then((uid) {
+        if( currentUser.admin == true)
+        {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRouter.admin, (route) => false);
+        } else
         if (currentUser.role == true) {
           Navigator.of(context).pushNamedAndRemoveUntil(
               AppRouter.teacher_home, (route) => false);
-        }
-        else {
+        } else
+        if (currentUser.role == false) {
           Navigator.of(context).pushNamedAndRemoveUntil(
               AppRouter.student_home, (route) => false);
         }

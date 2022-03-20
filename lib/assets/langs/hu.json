@@ -30,5 +30,11 @@
   "wrong-password": "Rossz jelszó",
   "user-not-found": "Nem létezik ilyen e-mail címmel felhasználó",
   "user-disabled": "Ez a felhasználó le lett tiltva ",
-  "undefined-error": "Hiba történt"
+  "undefined-error": "Hiba történt",
+  "admin_page": "Admin felület",
+  "add_new_semester": "Új félév hozzáadása",
+  "yes": "Igen",
+  "no": "Nem"
+
+
 }

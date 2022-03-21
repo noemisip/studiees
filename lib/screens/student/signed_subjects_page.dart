@@ -69,7 +69,7 @@ class _SignedSubjectPageState extends State<SignedSubjectPage> {
                 colors: [MyColors.background1, MyColors.background2])),
         child:  Column(
           children: [
-            MyPicker(),
+            MyPicker(""),
             Expanded(
               child: Scaffold(
                 backgroundColor: Colors.transparent,

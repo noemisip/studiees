@@ -31,7 +31,8 @@ class _AddPageState extends State<AddPage> {
   String? errorMessage;
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
-  var picker = SelectedValue();
+  var semesterPicker = MyPicker("");
+
 
   @override
   void initState() {
@@ -124,7 +125,7 @@ class _AddPageState extends State<AddPage> {
                           ),
                         ],
                       ),
-                  MyPicker(),
+                     semesterPicker,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -220,8 +221,7 @@ class _AddPageState extends State<AddPage> {
                             subjectModel.name = name.text;
                             subjectModel.university = loggedInUser.university;
                             subjectModel.current_part = 0;
-                            subjectModel.semester = picker.selectedValue;
-                            print(subjectModel.semester);
+                            subjectModel.semester = semesterPicker.semesterValue;
 
                             subjectAdapter.addSubject(subjectModel, context).whenComplete(() {
                             credit.clear();

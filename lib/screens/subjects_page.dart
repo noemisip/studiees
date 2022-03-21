@@ -74,7 +74,7 @@ class _SubjectPageState extends State<SubjectPage> {
                 colors: [MyColors.background1, MyColors.background2])),
         child:  Column(
           children: [
-            MyPicker(),
+            MyPicker(""),
             Expanded(
               child: Scaffold(
                       backgroundColor: Colors.transparent,

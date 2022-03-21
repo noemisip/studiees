@@ -7,21 +7,11 @@ import '../adapter/user_adapter.dart';
 import '../colors.dart';
 import 'my_text.dart';
 
-class SelectedValue extends ChangeNotifier {
-  String selectedValue = "";
-
-
-  changeValue(String value) {
-    selectedValue = value;
-  }
-
-  String getValue() {
-    return selectedValue;
-  }
-}
 
 class MyPicker extends StatefulWidget {
-  const MyPicker({Key? key}) : super(key: key);
+
+  late String semesterValue;
+  MyPicker(this.semesterValue, {Key? key}) : super(key: key);
 
 
   @override
@@ -37,7 +27,6 @@ class _MyPickerState extends State<MyPicker> {
   SemesterAdapter semesterAdapter = SemesterAdapter();
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
-  var semester = SelectedValue();
 
   @override
   initState()  {
@@ -75,7 +64,7 @@ class _MyPickerState extends State<MyPicker> {
                   ),
 
                 ),
-               MyText( text: semester.selectedValue),
+               MyText( text: widget.semesterValue),
               ]
     );
   }
@@ -91,11 +80,9 @@ class _MyPickerState extends State<MyPicker> {
               children: semesterAdapter.semesters.map((e) => Text(e.semester!)).toList(),
               onSelectedItemChanged: (value){
                 Text text = semesterAdapter.semesters.map((e) => Text(e.semester!)).toList()[value];
-                semester.selectedValue = text.data.toString();
                 setState(() {
-                  semester.changeValue( text.data.toString());
-                  print(semester.selectedValue);
-                  userAdapter.currentUser.currentSemester = semester.selectedValue;
+                  widget.semesterValue = text.data.toString();
+                  userAdapter.currentUser.currentSemester = widget.semesterValue;
                   userAdapter.changeCurrentSemester(userAdapter.currentUser,context);
                   if(userAdapter.currentUser.role == true){
                     subjectAdapter.getSubjectsByIdBySemester(userAdapter.currentUser);

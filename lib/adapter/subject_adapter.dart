@@ -63,16 +63,19 @@ class SubjectAdapter extends ChangeNotifier {
     List<String>? signedUpSubjects = [];
     signedUpSubjects = user.subjects;
     List<SubjectModel> temp = [];
-    for( var subject in signedUpSubjects!){
-      await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: subject).get().then((value) {
-        value.docs.forEach((result) {
-          SubjectModel model = SubjectModel.fromMap(result);
-          temp.add(model);
-          print(model.sid);
+    if( signedUpSubjects != null){
+      for( var subject in signedUpSubjects){
+        await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: subject).get().then((value) {
+          value.docs.forEach((result) {
+            SubjectModel model = SubjectModel.fromMap(result);
+            temp.add(model);
+            print(model.sid);
+          });
         });
-      });
       }
-    subjects = temp;
+      subjects = temp;
+    }
+
     print(subjects.length);
     notifyListeners();
   }
@@ -85,16 +88,23 @@ class SubjectAdapter extends ChangeNotifier {
   }
 
   Future<void> signUpSubject( SubjectModel subject, BuildContext context) async{
+
     int count = subject.current_part ?? 0;
     userAdapter.getUserById(context);
-    bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
 
-    if( subject.limit! > count && !alreadySignedUp ){
-      count++;
+    //bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
+
+    if( subject.limit! > count /*!alreadySignedUp*/ ){
       subject.current_part = count;
       changeSubject(subject, context);
       await userAdapter.addSubjectToUser(userAdapter.currentUser, subject.sid!, context);
     }
+
+    // bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
+    // if(!alreadySignedUp){
+    //   count++;
+    // }
+
     notifyListeners();
   }
 

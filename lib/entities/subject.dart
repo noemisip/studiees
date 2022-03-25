@@ -8,8 +8,9 @@ class SubjectModel {
   String? tid;
   int? current_part;
   String? sid;
+  List<String>? quizes;
 
- SubjectModel({this.name, this.limit, this.credit, this.semester, this.university, this.tid, this.current_part, this.sid});
+ SubjectModel({this.name, this.limit, this.credit, this.semester, this.university, this.tid, this.current_part, this.sid, this.quizes});
 
   factory SubjectModel.fromMap(map) {
     return SubjectModel(
@@ -20,7 +21,10 @@ class SubjectModel {
       tid: map['tid'],
       current_part: map['currentpart'],
       semester: map['semester'],
-      sid: map['sid']
+      sid: map['sid'],
+        quizes: map["quizes"] == null
+            ? null : List<String>.from(map["quizes"]
+            .map((x) => x))
     );
   }
 
@@ -33,7 +37,8 @@ class SubjectModel {
       'tid': tid,
       'currentpart': current_part,
       'semester': semester,
-      'sid': sid
+      'sid': sid,
+      "quizes": quizes == null ? null : List<dynamic>.from(quizes!.map((x) => x)),
     };
   }
 }

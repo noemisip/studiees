@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
+import 'package:stud_iees/screens/selected_subject_page.dart';
+import 'package:stud_iees/screens/teacher/new_quiz.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import 'package:stud_iees/widget/my_picker.dart';
 import 'package:stud_iees/widget/my_text.dart';
@@ -103,40 +105,46 @@ class SubjectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: RoundedShadowView(
-        backgroundColor: MyColors.tabBarColor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(child: MyText(text: subject.name ?? "")),
-            MyText(text: subject.credit.toString() +" " + tr("credit")),
-            MyText(
-                text: subject.current_part.toString() +
-                    "/" +
-                    subject.limit.toString()),
-            if(loggedInUser.role == false) Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: CupertinoButton(
-                    child: Text( "+",
-                      style: TextStyle(
-                          color: MyColors.background1, fontWeight: FontWeight.w600),
-                    ),
-                    color: Colors.white,
-                    onPressed: () {
-                      subjectAdapter.signUpSubject(subject, context);
-                    },
-                    padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  ),
-                ),
-              ],
-            ),
 
-          ],
+    return GestureDetector(
+      onTap: (){
+          showDialog(context: context, builder: (context) => SelectedSubject());
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: RoundedShadowView(
+          backgroundColor: MyColors.tabBarColor,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(child: MyText(text: subject.name ?? "")),
+              MyText(text: subject.credit.toString() +" " + tr("credit")),
+              MyText(
+                  text: subject.current_part.toString() +
+                      "/" +
+                      subject.limit.toString()),
+              if(loggedInUser.role == false) Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: CupertinoButton(
+                      child: Text( "+",
+                        style: TextStyle(
+                            color: MyColors.background1, fontWeight: FontWeight.w600),
+                      ),
+                      color: Colors.white,
+                      onPressed: () {
+                        subjectAdapter.signUpSubject(subject, context);
+                      },
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    ),
+                  ),
+                ],
+              ),
+
+            ],
+          ),
         ),
       ),
     );

@@ -34,7 +34,12 @@
   "admin_page": "Admin felület",
   "add_new_semester": "Új félév hozzáadása",
   "yes": "Igen",
-  "no": "Nem"
-
+  "no": "Nem",
+  "new_quiz": "Új kvíz",
+  "time": "Idő(perc)",
+  "type": "Típus",
+  "max_points": "Összpontszám",
+  "questions": "Kérdések",
+  "grades": "Jegyek"
 
 }

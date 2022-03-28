@@ -10,7 +10,7 @@ import '../../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../entities/user.dart';
-import '../../widget/my_picker.dart';
+import '../../widget/my_picker_semester.dart';
 
 
 class AddPage extends StatefulWidget {

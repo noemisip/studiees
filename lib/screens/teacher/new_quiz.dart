@@ -13,12 +13,14 @@ import 'package:easy_localization/easy_localization.dart';
 
 import '../../entities/quiz.dart';
 import '../../entities/user.dart';
-import '../../widget/my_picker.dart';
+import '../../widget/my_picker_semester.dart';
+import '../../widget/my_picker_type.dart';
 
 
 class NewQuizPage extends StatefulWidget {
-  const NewQuizPage({Key? key}) : super(key: key);
+  const NewQuizPage({Key? key, required this.subject}) : super(key: key);
 
+  final SubjectModel subject;
   @override
   _NewQuizPageState createState() => _NewQuizPageState();
 }
@@ -36,6 +38,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
   QuizAdapter quizAdapter = QuizAdapter();
+  MyTypePicker typePicker = MyTypePicker("");
 
   int grade2 = 40;
   int grade3 = 50;
@@ -123,6 +126,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                           },
                         ),
                       ),
+                      typePicker,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -285,6 +289,8 @@ class _NewQuizPageState extends State<NewQuizPage> {
                             quizModel.maxPoints = int.parse(maxPoints.text);
                             quizModel.time = int.parse(time.text);
                             quizModel.name = name.text;
+                            quizModel.subjid = widget.subject.sid;
+                            quizModel.type = typePicker.typeValue;
                             List<int> temp= [];
                             temp.add(grade2);
                            temp.add(grade3);
@@ -296,6 +302,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                               maxPoints.clear();
                               time.clear();
                               name.clear();
+                              Navigator.of(context).pop();
                             });
 
                           },

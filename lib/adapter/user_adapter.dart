@@ -13,6 +13,7 @@ class UserAdapter extends ChangeNotifier {
   List<UserModel> users = [];
   late UserModel currentUser;
   List<String> subjects = [];
+   UserModel subjTeacher = UserModel();
 
   Future<void> getUsers() async {
     List<UserModel> temp = [];
@@ -55,6 +56,15 @@ class UserAdapter extends ChangeNotifier {
       });
       currentUser = loggedInUser;
     }
+    notifyListeners();
+  }
+
+  Future<void> getTeacherById( String tid,BuildContext context) async{
+    await firebaseFirestore.collection("Users").where("uid", isEqualTo: tid).get().then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+      subjTeacher = UserModel.fromMap(result);
+      });
+    });
     notifyListeners();
   }
 

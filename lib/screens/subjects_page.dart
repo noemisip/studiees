@@ -9,7 +9,7 @@ import 'package:stud_iees/entities/subject.dart';
 import 'package:stud_iees/screens/selected_subject_page.dart';
 import 'package:stud_iees/screens/teacher/new_quiz.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
-import 'package:stud_iees/widget/my_picker.dart';
+import 'package:stud_iees/widget/my_picker_semester.dart';
 import 'package:stud_iees/widget/my_text.dart';
 import '../adapter/user_adapter.dart';
 import '../colors.dart';
@@ -87,7 +87,7 @@ class _SubjectPageState extends State<SubjectPage> {
                             itemCount: subjectAdapter.subjects.length ?? 0,
                             padding: const EdgeInsets.all(20),
                             itemBuilder: (context, index) =>
-                                SubjectItem(subject: subjectAdapter.subjects[index])),
+                                SubjectItem(subject: subjectAdapter.subjects[index], function: "+",)),
                       ),
                     ),
             ),
@@ -99,16 +99,17 @@ class _SubjectPageState extends State<SubjectPage> {
 }
 
 class SubjectItem extends StatelessWidget {
-  const SubjectItem({Key? key, required this.subject}) : super(key: key);
+  const SubjectItem({Key? key, required this.subject, required this.function}) : super(key: key);
 
   final SubjectModel subject;
+  final String function;
 
   @override
   Widget build(BuildContext context) {
 
     return GestureDetector(
       onTap: (){
-          showDialog(context: context, builder: (context) => SelectedSubject());
+          showDialog(context: context, builder: (context) => SelectedSubject(selectedSubeject: subject));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -128,7 +129,7 @@ class SubjectItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: CupertinoButton(
-                      child: Text( "+",
+                      child: Text( function,
                         style: TextStyle(
                             color: MyColors.background1, fontWeight: FontWeight.w600),
                       ),

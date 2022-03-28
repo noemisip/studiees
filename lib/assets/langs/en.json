@@ -40,6 +40,8 @@
   "type": "Type",
   "max_points": "Max Points",
   "questions": "Questions",
-  "grades": "Grades"
+  "grades": "Grades",
+  "students": "Students",
+  "quizes": "Quizes"
 
 }

@@ -12,6 +12,14 @@ class QuizAdapter extends ChangeNotifier{
     DocumentReference docRef = await firebaseFirestore.collection('Quizes').add(quiz.toMap());
     quiz.id = docRef.id;
     quizes.add(quiz);
+    changeQuiz(quiz, context);
+    notifyListeners();
+  }
+
+  void changeQuiz (QuizModel quiz, BuildContext context){
+    FirebaseFirestore.instance.collection("Quizes").doc(quiz.id).update(
+        quiz.toMap()
+    );
     notifyListeners();
   }
   

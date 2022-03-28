@@ -7,12 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
-import 'package:stud_iees/widget/my_picker.dart';
+import 'package:stud_iees/widget/my_picker_semester.dart';
 import 'package:stud_iees/widget/my_text.dart';
 import '../../adapter/user_adapter.dart';
 import '../../colors.dart';
 import '../../entities/user.dart';
 import '../../widget/rounded_shadow_view.dart';
+import '../subjects_page.dart';
 
 class SignedSubjectPage extends StatefulWidget {
   const SignedSubjectPage({Key? key}) : super(key: key);
@@ -80,7 +81,7 @@ class _SignedSubjectPageState extends State<SignedSubjectPage> {
                       itemCount: subjectAdapter.subjects.length ?? 0,
                       padding: const EdgeInsets.all(20),
                       itemBuilder: (context, index) =>
-                          SubjectItem(subject: subjectAdapter.subjects[index])),
+                          SubjectItem(subject: subjectAdapter.subjects[index], function: "-")),
                 ),
               ),
             ),
@@ -91,45 +92,3 @@ class _SignedSubjectPageState extends State<SignedSubjectPage> {
   }
 }
 
-class SubjectItem extends StatelessWidget {
-  const SubjectItem({Key? key, required this.subject}) : super(key: key);
-
-  final SubjectModel subject;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: RoundedShadowView(
-        backgroundColor: MyColors.tabBarColor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(child: MyText(text: subject.name ?? "")),
-            MyText(text: subject.credit.toString() +" " + tr("credit")),
-            MyText(
-                text: subject.current_part.toString() +
-                    "/" +
-                    subject.limit.toString()),
-            Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: CupertinoButton(
-                child: Text( "-",
-                  style: TextStyle(
-                      color: MyColors.background1, fontWeight: FontWeight.w600),
-                ),
-                color: Colors.white,
-                onPressed: () {
-                  subjectAdapter.signDownSubject(subject, context);
-                },
-                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-              ),
-            ),
-
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -20,7 +20,7 @@ class QuizModel {
         time: map['time'],
         result: map['result'],
         subjid: map['subjid'],
-        maxPoints: map['full_points'],
+        maxPoints: map['max_points'],
       questions: map["questions"] == null
           ? null : List<String>.from(map["questions"]
           .map((x) => x)),

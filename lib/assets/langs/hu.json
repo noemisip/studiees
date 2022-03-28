@@ -40,6 +40,7 @@
   "type": "Típus",
   "max_points": "Összpontszám",
   "questions": "Kérdések",
-  "grades": "Jegyek"
-
+  "grades": "Jegyek",
+  "students": "hallgató",
+  "quizes": "Kvízek"
 }

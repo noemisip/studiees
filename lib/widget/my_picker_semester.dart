@@ -34,7 +34,7 @@ class _MyPickerState extends State<MyPicker> {
     subjectAdapter = context.read<SubjectAdapter>();
     semesterAdapter = context.read<SemesterAdapter>();
     semesterAdapter.getSemesters();
-    userAdapter.getUserById(context);
+    userAdapter.getCurrentUser(context);
   }
   @override
   Widget build(BuildContext context) {

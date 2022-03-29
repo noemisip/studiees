@@ -57,7 +57,6 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
       userAdapter.getTeacherById(widget.selectedSubeject.tid?? "", context).then((value) {
         quizAdapter.getQuizesBySubject(widget.selectedSubeject.sid??"").whenComplete(() {
           setState(() {
-            print(quizAdapter.quizes.length);
           });
         });
       });
@@ -140,12 +139,23 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                     ),
                   ),
+                   Padding(
+                     padding: EdgeInsets.symmetric(vertical: 10),
+                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MyText(text: "Type"),
+                        MyText(text: "Name"),
+                        MyText(text: "Deadline"),
+                      ],
+                  ),
+                   ),
                   Container(
                     height:  MediaQuery.of(context).size.height / 2,
                       child: Scaffold(
                         backgroundColor: Colors.transparent,
                         body: Consumer<QuizAdapter>(
-                          builder: (context, quizAdapter,child) => quizAdapter.quizes.isEmpty
+                          builder: (context, quizAdapter,child) => quizAdapter.ended == false
                               ? const LoadingIndicator()
                               : ListView.builder(
                               itemCount: quizAdapter.quizes.length ?? 0,
@@ -184,7 +194,8 @@ class QuizItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               MyText(text: quiz.type.toString()),
-          MyText(text: quiz.name ?? ""),
+              MyText(text: quiz.name ?? ""),
+              MyText(text: formatter.format(DateTime.fromMillisecondsSinceEpoch(quiz.deadline?? 0)).toString()),
             ],
           ),
         ),

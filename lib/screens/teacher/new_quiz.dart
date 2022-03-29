@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/adapter/user_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
@@ -13,6 +14,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import '../../entities/quiz.dart';
 import '../../entities/user.dart';
+import '../../widget/my_date.dart';
 import '../../widget/my_picker_semester.dart';
 import '../../widget/my_picker_type.dart';
 
@@ -30,7 +32,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
   var name = TextEditingController();
   var time = TextEditingController();
   var maxPoints = TextEditingController();
-
+  var deadline = SelectedDate();
 
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
@@ -55,6 +57,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
         .get()
         .then((value) {
       loggedInUser = UserModel.fromMap(value.data());
+      quizAdapter = context.read<QuizAdapter>();
       setState(() {});
     });
   }
@@ -275,6 +278,10 @@ class _NewQuizPageState extends State<NewQuizPage> {
                           ],
                         ),
                       ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                        child: MyDate(),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: CupertinoButton(
@@ -293,10 +300,11 @@ class _NewQuizPageState extends State<NewQuizPage> {
                             quizModel.type = typePicker.typeValue;
                             List<int> temp= [];
                             temp.add(grade2);
-                           temp.add(grade3);
-                           temp.add(grade4);
+                            temp.add(grade3);
+                            temp.add(grade4);
                             temp.add(grade5);
                             quizModel.grades = temp;
+                            quizModel.deadline = deadline.selectedDate.millisecondsSinceEpoch;
 
                             quizAdapter.addQuiz(quizModel, context).whenComplete(() {
                               maxPoints.clear();

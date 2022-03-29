@@ -5,7 +5,7 @@ import 'package:stud_iees/entities/quiz.dart';
 class QuizAdapter extends ChangeNotifier{
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
+  bool ended = false;
   List<QuizModel> quizes = [];
 
   Future<void> addQuiz(QuizModel quiz, BuildContext context) async{
@@ -30,7 +30,7 @@ class QuizAdapter extends ChangeNotifier{
         QuizModel model = QuizModel.fromMap(result);
         temp.add(model);
       });
-    });
+    }).whenComplete(() => ended = true);
     quizes = temp;
     notifyListeners();
   }

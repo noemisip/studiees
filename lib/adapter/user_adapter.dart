@@ -43,7 +43,7 @@ class UserAdapter extends ChangeNotifier {
         .pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
   }
 
-  Future getUserById(BuildContext context) async {
+  Future getCurrentUser(BuildContext context) async {
     User? user = _auth.currentUser;
     if (user != null) {
       UserModel loggedInUser = UserModel();
@@ -94,7 +94,7 @@ class UserAdapter extends ChangeNotifier {
     try {
       await _auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .whenComplete(() => getUserById(context))
+          .whenComplete(() => getCurrentUser(context))
           .then((uid) {
         if( currentUser.admin == true)
         {

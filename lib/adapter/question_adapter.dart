@@ -6,7 +6,6 @@ import 'package:stud_iees/entities/question.dart';
 class QuestionAdapter extends ChangeNotifier{
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
   List<QuestionModel> questions = [];
 
   Future<void> addQuiz(QuestionModel question, BuildContext context) async{

@@ -5,7 +5,7 @@ import 'package:stud_iees/entities/semester.dart';
 class SemesterAdapter extends ChangeNotifier{
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
+  bool ended = false;
   List<SemesterModel> semesters = [];
 
   Future<void> addSemester(SemesterModel semester, BuildContext context) async{
@@ -30,7 +30,7 @@ class SemesterAdapter extends ChangeNotifier{
         SemesterModel model = SemesterModel.fromMap(result);
         temp.add(model);
       });
-    });
+    }).whenComplete(() => ended = true);
     semesters = temp;
     notifyListeners();
   }

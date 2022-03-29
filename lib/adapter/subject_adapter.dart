@@ -6,60 +6,65 @@ import '../entities/user.dart';
 
 class SubjectAdapter extends ChangeNotifier {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
+  bool ended = false;
   UserAdapter userAdapter = UserAdapter();
   List<SubjectModel> subjects = [];
 
   Future<void> getSubjectsById( String id) async {
+     ended = false;
     List<SubjectModel> temp = [];
     await firebaseFirestore.collection("Subjects").where("tid", isEqualTo: id).get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    });
+    }).whenComplete(() => ended = true);
     subjects = temp;
     notifyListeners();
   }
 
 
   Future<void> getSubjectsByIdBySemester( UserModel user) async {
+     ended = false;
     List<SubjectModel> temp = [];
     await firebaseFirestore.collection("Subjects").where("tid", isEqualTo: user.uid).where("semester", isEqualTo: user.currentSemester).get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    });
+    }).whenComplete(() => ended = true);
     subjects = temp;
     notifyListeners();
   }
 
   Future<void> getSubjectsBySemester( UserModel user) async {
+     ended = false;
     List<SubjectModel> temp = [];
     await firebaseFirestore.collection("Subjects").where("university", isEqualTo: user.university).where("semester", isEqualTo: user.currentSemester).get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    });
+    }).whenComplete(() => ended = true);
     subjects = temp;
     notifyListeners();
   }
 
   Future<void> getSubjectsByUniversity( UserModel user) async {
+     ended = false;
     List<SubjectModel> temp = [];
     await firebaseFirestore.collection("Subjects").where("university", isEqualTo: user.university).get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    });
+    }).whenComplete(() => ended = true);
     subjects = temp;
     notifyListeners();
   }
 
   Future<void> getSubjectsBySignedUp( UserModel user) async {
+     ended = false;
     List<String>? signedUpSubjects = [];
     signedUpSubjects = user.subjects;
     List<SubjectModel> temp = [];
@@ -71,7 +76,7 @@ class SubjectAdapter extends ChangeNotifier {
             temp.add(model);
             print(model.sid);
           });
-        });
+        }).whenComplete(() => ended = true);
       }
       subjects = temp;
     }
@@ -90,36 +95,31 @@ class SubjectAdapter extends ChangeNotifier {
   Future<void> signUpSubject( SubjectModel subject, BuildContext context) async{
 
     int count = subject.current_part ?? 0;
-    userAdapter.getUserById(context);
-
-    //bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
-
-    if( subject.limit! > count /*!alreadySignedUp*/ ){
-      subject.current_part = count;
-      changeSubject(subject, context);
-      await userAdapter.addSubjectToUser(userAdapter.currentUser, subject.sid!, context);
-    }
-
-    // bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
-    // if(!alreadySignedUp){
-    //   count++;
-    // }
-
+    userAdapter.getCurrentUser(context).whenComplete(() {
+      bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
+      if( subject.limit! > count && !alreadySignedUp){
+        count++;
+        subject.current_part = count;
+        changeSubject(subject, context);
+        userAdapter.addSubjectToUser(userAdapter.currentUser, subject.sid!, context);
+      }
+    });
     notifyListeners();
   }
 
   Future<void> signDownSubject( SubjectModel subject, BuildContext context) async{
     int count = subject.current_part ?? 0;
-    userAdapter.getUserById(context);
-    bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
+    userAdapter.getCurrentUser(context).whenComplete(() async {
+      bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
+      if(alreadySignedUp){
+        count--;
+        subject.current_part = count;
+        changeSubject(subject, context);
+        userAdapter.removeSubjectFromUser(userAdapter.currentUser, subject.sid!, context);
+        getSubjectsBySignedUp(userAdapter.currentUser);
+      }
+    });
 
-    if( alreadySignedUp ){
-      count--;
-      subject.current_part = count;
-      changeSubject(subject, context);
-      await userAdapter.removeSubjectFromUser(userAdapter.currentUser, subject.sid!, context);
-      getSubjectsBySignedUp(userAdapter.currentUser);
-    }
     notifyListeners();
   }
 

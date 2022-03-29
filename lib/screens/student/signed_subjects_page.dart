@@ -37,11 +37,13 @@ class _SignedSubjectPageState extends State<SignedSubjectPage> {
         .doc(user!.uid)
         .get()
         .then((value) {
-      setState(() {
-      });
       loggedInUser = UserModel.fromMap(value.data());
       subjectAdapter = context.read<SubjectAdapter>();
-      subjectAdapter.getSubjectsBySignedUp(loggedInUser);
+      userAdapter = context.read<UserAdapter>();
+      subjectAdapter.getSubjectsBySignedUp(loggedInUser).whenComplete(() {
+        setState(() {
+        });
+      });
     });
   }
 

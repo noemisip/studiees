@@ -8,9 +8,9 @@ class QuizModel {
   List<int>? grades;
   String? subjid;
   int? result;
+  int? deadline;
 
-
-  QuizModel({this.id, this.type, this.name, this.time, this.questions, this.maxPoints, this.grades, this.subjid, this.result});
+  QuizModel({this.id, this.type, this.name, this.time, this.questions, this.maxPoints, this.grades, this.subjid, this.result, this.deadline});
 
   factory QuizModel.fromMap(map) {
     return QuizModel(
@@ -19,6 +19,7 @@ class QuizModel {
         name: map['name'],
         time: map['time'],
         result: map['result'],
+      deadline: map['deadline'],
         subjid: map['subjid'],
         maxPoints: map['max_points'],
       questions: map["questions"] == null
@@ -38,6 +39,7 @@ class QuizModel {
       'time': time,
       'result': result,
       'subjid': subjid,
+      'deadline': deadline,
       'max_points': maxPoints,
       'questions': questions == null ? null : List<dynamic>.from(questions!.map((x) => x)),
       'grades': grades == null ? null : List<dynamic>.from(grades!.map((x) => x)),

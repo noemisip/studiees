@@ -38,8 +38,6 @@ class _SubjectPageState extends State<SubjectPage> {
         .doc(user!.uid)
         .get()
         .then((value) {
-     setState(() {
-     });
       loggedInUser = UserModel.fromMap(value.data());
       subjectAdapter = context.read<SubjectAdapter>();
       if(loggedInUser.role == true){
@@ -48,6 +46,8 @@ class _SubjectPageState extends State<SubjectPage> {
       else if ( loggedInUser.role == false){
         subjectAdapter.getSubjectsByUniversity(loggedInUser);
       }
+      setState(() {
+      });
     });
   }
 
@@ -81,7 +81,7 @@ class _SubjectPageState extends State<SubjectPage> {
               child: Scaffold(
                       backgroundColor: Colors.transparent,
                       body: Consumer<SubjectAdapter>(
-                        builder: (context, subjectAdapter,child) => subjectAdapter.subjects.isEmpty
+                        builder: (context, subjectAdapter,child) => subjectAdapter.ended == false
                             ? const LoadingIndicator()
                             : ListView.builder(
                             itemCount: subjectAdapter.subjects.length ?? 0,
@@ -135,7 +135,12 @@ class SubjectItem extends StatelessWidget {
                       ),
                       color: Colors.white,
                       onPressed: () {
-                        subjectAdapter.signUpSubject(subject, context);
+                        if( function == "+"){
+                          subjectAdapter.signUpSubject(subject, context);
+                        }
+                        if( function == "-"){
+                          subjectAdapter.signDownSubject(subject, context);
+                        }
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),

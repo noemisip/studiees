@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../colors.dart';
+import 'my_text.dart';
+
 class SelectedDate extends ChangeNotifier {
   DateTime selectedDate = DateTime.now();
 
@@ -27,9 +30,7 @@ class MyDate extends StatefulWidget {
 }
 
 class _MyDateState extends State<MyDate> {
-  var txt = TextEditingController();
   var selectedDate = SelectedDate();
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,8 +40,8 @@ class _MyDateState extends State<MyDate> {
           padding: const EdgeInsets.only(right: 15),
           child: CupertinoButton(
             child: Text(tr("choose_date"),
-                style: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w600)),
+                style:  TextStyle(
+                    color: MyColors.background1, fontWeight: FontWeight.w600)),
             color: Colors.white,
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -49,20 +50,7 @@ class _MyDateState extends State<MyDate> {
             },
           ),
         ),
-        Expanded(
-          child: TextField(
-            style: const TextStyle(
-                fontSize: 15,
-                color: Colors.white,
-                fontWeight: FontWeight.w600),
-              controller: txt,
-              decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none)),
-        ),
+        MyText(text: formatter.format(selectedDate.selectedDate)),
       ],
     );
   }
@@ -80,13 +68,12 @@ class _MyDateState extends State<MyDate> {
                 if (value.toString() != selectedDate.selectedDate.toString()) {
                   setState(() {
                     selectedDate.changeDate(value);
-                    txt.text = formatter.format(selectedDate.selectedDate);
                   });
                 }
               },
               initialDateTime: DateTime.now(),
               minimumYear: 1900,
-              maximumYear: DateTime.now().year,
+              maximumYear: DateTime.now().year + 1,
             ),
           );
         });

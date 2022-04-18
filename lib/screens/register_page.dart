@@ -384,46 +384,6 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                                   fontWeight: FontWeight.w600))),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text("Admin",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(tr("no"),
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600))),
-                      CupertinoSwitch(
-                          value: admin,
-                          activeColor: MyColors.background1,
-                          onChanged: (value) {
-                            setState(() {
-                              admin = value;
-                            });
-                          }),
-                       Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(tr("yes"),
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600))),
-                    ],
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: CupertinoButton(

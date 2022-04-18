@@ -42,5 +42,16 @@
   "questions": "Kérdések",
   "grades": "Jegyek",
   "students": "hallgató",
-  "quizes": "Kvízek"
+  "quizes": "Kvízek",
+  "add_question": "Kérdés hozzáadása",
+  "question": "Kérdés",
+  "point": "Pont",
+  "answer": "Válasz",
+  "new_question": "Új kérdés",
+  "create_quiz": "Kvíz létrehozása",
+  "minutes": "perc",
+  "questions2": "kérdés",
+  "false": "Hamis",
+  "true": "Igaz"
+
 }

@@ -5,6 +5,8 @@ import 'package:stud_iees/screens/info_screen.dart';
 import 'package:stud_iees/screens/student/signed_subjects_page.dart';
 import 'package:stud_iees/screens/subjects_page.dart';
 
+import 'all_tasks.dart';
+
 
 class StudentHomeScreen extends StatelessWidget {
   const StudentHomeScreen({Key? key}) : super(key: key);
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<_HomeScreen> {
       body: InfoPage(),
     ),
     Scaffold(
-      body: InfoPage(),
+      body: AllTasks(),
     ),
     Scaffold(
       body: InfoPage(),

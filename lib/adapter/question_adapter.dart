@@ -7,23 +7,30 @@ class QuestionAdapter extends ChangeNotifier{
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   List<QuestionModel> questions = [];
+  QuestionModel currQuestion = QuestionModel();
 
-  Future<void> addQuiz(QuestionModel question, BuildContext context) async{
+  Future<void> addQuestion(QuestionModel question, BuildContext context) async{
     DocumentReference docRef = await firebaseFirestore.collection('Questions').add(question.toMap());
     question.qid = docRef.id;
+    changeQuestion(question, context);
     questions.add(question);
     notifyListeners();
   }
 
-  Future<void> getQuestionsByQuizes(String qid) async {
-    List<QuestionModel> temp = [];
+  void changeQuestion (QuestionModel question, BuildContext context){
+    FirebaseFirestore.instance.collection("Questions").doc(question.qid).update(
+        question.toMap()
+    );
+    notifyListeners();
+  }
+
+  Future<void> getQuestionByQuiz(String qid) async {
     await firebaseFirestore.collection("Questions").where("qid", isEqualTo: qid).get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         QuestionModel model = QuestionModel.fromMap(result);
-        temp.add(model);
+        currQuestion = model;
       });
     });
-    questions = temp;
     notifyListeners();
   }
 }

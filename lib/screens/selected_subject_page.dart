@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stud_iees/helpers/picturehelper.dart';
 import 'package:stud_iees/screens/student/signed_subjects_page.dart';
+import 'package:stud_iees/screens/student/start_task.dart';
 import 'package:stud_iees/screens/teacher/new_quiz.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import '../adapter/quiz_adapter.dart';
@@ -127,7 +128,7 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
                     padding: const EdgeInsets.all(20),
                     child: CupertinoButton(
                       child: Text(
-                        tr("Create Quiz"),
+                        tr("create_quiz"),
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w600),
                       ),
@@ -185,17 +186,24 @@ class QuizItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: (){
+        if ( type == false ){
+          showDialog(context: context, builder: (context) => StartTask(selectedQuiz: quiz));
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: RoundedShadowView(
           backgroundColor: MyColors.tabBarColor,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Column(
             children: [
-              MyText(text: quiz.type.toString()),
-              MyText(text: quiz.name ?? ""),
-              MyText(text: formatter.format(DateTime.fromMillisecondsSinceEpoch(quiz.deadline?? 0)).toString()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(child: MyText(text: quiz.type.toString())),
+                  Expanded(child: MyText(text: quiz.name ?? "")),
+                  Expanded(child: MyText(text: formatter.format(DateTime.fromMillisecondsSinceEpoch(quiz.deadline?? 0)).toString())),
+                ],
+              ),
             ],
           ),
         ),

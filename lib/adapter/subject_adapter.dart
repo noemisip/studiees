@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:stud_iees/adapter/user_adapter.dart';
+import '../entities/quiz.dart';
 import '../entities/subject.dart';
 import '../entities/user.dart';
 
@@ -9,6 +10,7 @@ class SubjectAdapter extends ChangeNotifier {
   bool ended = false;
   UserAdapter userAdapter = UserAdapter();
   List<SubjectModel> subjects = [];
+  List<QuizModel> quizes = [];
 
   Future<void> getSubjectsById( String id) async {
      ended = false;
@@ -64,28 +66,44 @@ class SubjectAdapter extends ChangeNotifier {
   }
 
   Future<void> getSubjectsBySignedUp( UserModel user) async {
-     ended = false;
+    ended = false;
     List<String>? signedUpSubjects = [];
     signedUpSubjects = user.subjects;
     List<SubjectModel> temp = [];
+
     if( signedUpSubjects != null){
       for( var subject in signedUpSubjects){
         await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: subject).get().then((value) {
           value.docs.forEach((result) {
             SubjectModel model = SubjectModel.fromMap(result);
             temp.add(model);
-            print(model.sid);
           });
         }).whenComplete(() => ended = true);
       }
       subjects = temp;
     }
-
-    print(subjects.length);
     notifyListeners();
   }
 
-  void changeSubject (SubjectModel subject, BuildContext context){
+  Future<void> getAllTasks(UserModel user) async{
+    ended = false;
+    await getSubjectsBySignedUp(user);
+    List<QuizModel> temp = [];
+
+    for( var subject in subjects){
+      await firebaseFirestore.collection("Quizes").where("subjid", isEqualTo: subject.sid).get().then((value) {
+        value.docs.forEach((result) {
+          QuizModel model = QuizModel.fromMap(result);
+          temp.add(model);
+        });
+      }).whenComplete(() => ended = true);
+      quizes = temp;
+    }
+    print(quizes.length);
+    notifyListeners();
+  }
+
+  Future changeSubject (SubjectModel subject, BuildContext context) async{
     FirebaseFirestore.instance.collection("Subjects").doc(subject.sid).update(
         subject.toMap()
     );
@@ -114,9 +132,12 @@ class SubjectAdapter extends ChangeNotifier {
       if(alreadySignedUp){
         count--;
         subject.current_part = count;
-        changeSubject(subject, context);
-        userAdapter.removeSubjectFromUser(userAdapter.currentUser, subject.sid!, context);
-        getSubjectsBySignedUp(userAdapter.currentUser);
+        await changeSubject(subject, context);
+        print("**");
+        print(userAdapter.currentUser.subjects);
+        await userAdapter.removeSubjectFromUser(userAdapter.currentUser, subject.sid!, context);
+        await getSubjectsBySignedUp(userAdapter.currentUser);
+        notifyListeners();
       }
     });
 

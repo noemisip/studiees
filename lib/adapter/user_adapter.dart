@@ -77,17 +77,20 @@ class UserAdapter extends ChangeNotifier {
 
   Future<void> addSubjectToUser(UserModel user, String sid, BuildContext context) async{
     subjects.add(sid);
+    user.subjects?.add(sid);
     await firebaseFirestore.collection("Users").doc(user.uid).update({"subjects": FieldValue.arrayUnion(subjects)});
     notifyListeners();
   }
 
   Future<void> removeSubjectFromUser(UserModel user, String sid, BuildContext context) async{
     subjects.remove(sid);
+    user.subjects?.remove(sid);
     List<String> removeable = [];
     removeable.add(sid);
     await firebaseFirestore.collection("Users").doc(user.uid).update({
       'subjects': FieldValue.arrayRemove(removeable)});
     notifyListeners();
+    print(subjects);
   }
 
   void signIn(String email, String password, BuildContext context) async {

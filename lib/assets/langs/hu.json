@@ -52,6 +52,14 @@
   "minutes": "perc",
   "questions2": "kérdés",
   "false": "Hamis",
-  "true": "Igaz"
+  "true": "Igaz",
+  "your_score": "Eredményed",
+  "points": "pont",
+  "your_grade": "Osztáyzatod",
+  "start": "Indítás",
+  "next": "Következő",
+  "current_points": "Pontjaid",
+  "choose_type": "Válassz típust",
+  "choose_semester": "Válassz szemesztert"
 
 }

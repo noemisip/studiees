@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +50,7 @@ class _MyPickerState extends State<MyPicker> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CupertinoButton(
-                        child: Text( "Choose semester",
+                        child: Text( tr("choose_semester"),
                           style: TextStyle(
                               color: MyColors.background1, fontWeight: FontWeight.w600),
                         ),

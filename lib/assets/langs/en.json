@@ -52,6 +52,13 @@
   "minutes": "minutes",
   "questions2": "question",
   "false": "False",
-  "true": "True"
-
+  "true": "True",
+  "your_score": "Your Score",
+  "points": "Points",
+  "your_grade": "Your Grade",
+  "start": "Start",
+  "next": "Next",
+  "current_points": "Current points",
+  "choose_type": "Choose type",
+  "choose_semester": "Choose semester"
 }

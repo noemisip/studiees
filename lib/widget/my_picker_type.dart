@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../adapter/subject_adapter.dart';
@@ -40,7 +41,7 @@ class _MyPickerState extends State<MyTypePicker> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CupertinoButton(
-                    child: Text( "Choose type",
+                    child: Text(tr("choose_type"),
                       style: TextStyle(
                           color: MyColors.background1, fontWeight: FontWeight.w600),
                     ),

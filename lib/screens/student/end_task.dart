@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:stud_iees/adapter/quiz_adapter.dart';
-
-import '../../adapter/question_adapter.dart';
 import '../../app_router.dart';
 import '../../colors.dart';
-import '../../entities/quiz.dart';
+
 
 class EndTask extends StatefulWidget {
   EndTask({Key? key, required this.quizAdapter, required this.points})
@@ -67,10 +65,10 @@ class _EndTaskState extends State<EndTask> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text("Your score:",
-                          style: TextStyle(
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Text(tr("your_score"),
+                          style: const TextStyle(
                               fontSize: 25,
                               color: Colors.white,
                               fontWeight: FontWeight.w800)),
@@ -80,8 +78,8 @@ class _EndTaskState extends State<EndTask> {
                       child: Text(
                           (widget.points.toString() +
                               " / " +
-                              widget.quizAdapter.currQuiz.maxPoints.toString() +
-                              " Points"),
+                              widget.quizAdapter.currQuiz.maxPoints.toString() +" " +
+                              tr("points")),
                           style: const TextStyle(
                               fontSize: 25,
                               color: Colors.white,
@@ -104,7 +102,7 @@ class _EndTaskState extends State<EndTask> {
                     Padding(
                       padding: const EdgeInsets.all(15),
                       child: Text(
-                          "Your grade: " + getGrade((widget.points /
+                          tr("your_grade") + ": "+ getGrade((widget.points /
                               widget.quizAdapter.currQuiz.maxPoints! *
                               100).toInt()).toString(),
                           style: const TextStyle(

@@ -64,7 +64,7 @@ class _QuestionPageState extends State<QuestionPage>  {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Text(("Current points: " + widget.points.toString() + "/" + widget.quizAdapter.currQuiz.maxPoints.toString()),
+                  child: Text((tr("current_points") +" "+ widget.points.toString() + "/" + widget.quizAdapter.currQuiz.maxPoints.toString()),
                       style: const TextStyle( fontSize: 25,
                           color: Colors.white, fontWeight: FontWeight.w800)),
                 ),
@@ -116,8 +116,8 @@ class _QuestionPageState extends State<QuestionPage>  {
                   ],
                 ),
                 CupertinoButton(
-                  child: const Text(
-                    "Next",
+                  child: Text(
+                    tr("next"),
                     style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20),
                   ),
                   color: Colors.white,

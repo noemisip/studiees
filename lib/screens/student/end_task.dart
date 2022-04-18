@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:stud_iees/adapter/grade_adapter.dart';
 import 'package:stud_iees/adapter/quiz_adapter.dart';
+import '../../adapter/user_adapter.dart';
 import '../../app_router.dart';
 import '../../colors.dart';
+import '../../entities/grade.dart';
 
 
 class EndTask extends StatefulWidget {
@@ -20,9 +23,12 @@ class EndTask extends StatefulWidget {
 }
 
 class _EndTaskState extends State<EndTask> {
+
+  UserAdapter userAdapter = UserAdapter();
   @override
   void initState() {
     super.initState();
+    userAdapter.getCurrentUser(context);
   }
 
   int getGrade(int result) {
@@ -120,6 +126,15 @@ class _EndTaskState extends State<EndTask> {
                       ),
                       color: Colors.white,
                       onPressed: () {
+
+                        GradeAdapter gradeAdapter = GradeAdapter();
+                        GradeModel grade = GradeModel();
+                        grade.qid = widget.quizAdapter.currQuiz.id;
+                        grade.grade = getGrade((widget.points /
+                            widget.quizAdapter.currQuiz.maxPoints! *
+                            100).toInt());
+                        grade.uid = userAdapter.currentUser.uid;
+                        gradeAdapter.addGrade(grade, context);
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             AppRouter.student_home, (route) => false);
                       },

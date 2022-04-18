@@ -3,19 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stud_iees/helpers/picturehelper.dart';
-import 'package:stud_iees/screens/student/signed_subjects_page.dart';
 import 'package:stud_iees/screens/student/start_task.dart';
 import 'package:stud_iees/screens/teacher/new_quiz.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import '../adapter/quiz_adapter.dart';
-import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../entities/quiz.dart';
 import '../entities/subject.dart';
 import '../entities/user.dart';
-import '../widget/my_date.dart';
 import '../adapter/user_adapter.dart';
 import '../widget/my_text.dart';
 import '../widget/rounded_shadow_view.dart';
@@ -33,6 +29,8 @@ class SelectedSubject extends StatefulWidget {
     return _SelectedSubjectPageState();
   }
 }
+
+final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
 class _SelectedSubjectPageState extends State<SelectedSubject>  {
   String? errorMessage;
@@ -145,9 +143,9 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
                      child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        MyText(text: "Type"),
-                        MyText(text: "Name"),
-                        MyText(text: "Deadline"),
+                        MyText(text: tr("type")),
+                        MyText(text: tr("name")),
+                        MyText(text: tr("deadline")),
                       ],
                   ),
                    ),
@@ -186,7 +184,7 @@ class QuizItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: (){
-        if ( type == false ){
+        if ( type == false && quiz.questions!.isNotEmpty ){
           showDialog(context: context, builder: (context) => StartTask(selectedQuiz: quiz));
         }
       },

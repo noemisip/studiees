@@ -90,11 +90,11 @@ class _QuizModelState extends State<StartTask>  {
                   ),
                   color: Colors.white,
                   onPressed: () {
-                    showDialog(context: context, builder: (context) {
-                      return QuestionPage(selectedQuiz: widget.selectedQuiz, time:  widget.selectedQuiz.time?? 0,
-                          points: 0, next: 0, quizAdapter: quizAdapter, questionAdapter: questionAdapter);
-                    }
-                    );
+                      showDialog(context: context, builder: (context) {
+                        return QuestionPage(selectedQuiz: widget.selectedQuiz, time:  widget.selectedQuiz.time?? 0,
+                            points: 0, next: 0, quizAdapter: quizAdapter, questionAdapter: questionAdapter);
+                      }
+                      );
                   },
                   padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),

@@ -76,6 +76,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                     color: Colors.white, fontWeight: FontWeight.w800)),
             leading: CupertinoButton(
                 onPressed: () {
+                  questionAdapter.questions.clear();
                   Navigator.of(context).pop();
                 },
                 child: const Icon(
@@ -287,9 +288,9 @@ class _NewQuizPageState extends State<NewQuizPage> {
                           ],
                         ),
                       ),
-                      const Padding(
+                       Padding(
                         padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                        child: MyDate(),
+                        child: MyDate(selectedDate: deadline),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -324,7 +325,6 @@ class _NewQuizPageState extends State<NewQuizPage> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20)),
                       ),
-                      if(questionAdapter.questions.isNotEmpty)
                         SizedBox(
                         height: 60,
                         child: Consumer<QuestionAdapter>(

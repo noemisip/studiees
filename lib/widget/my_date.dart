@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import '../colors.dart';
 import 'my_text.dart';
 
@@ -21,8 +19,9 @@ class SelectedDate extends ChangeNotifier {
 final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
 class MyDate extends StatefulWidget {
-  const MyDate({Key? key}) : super(key: key);
+  MyDate({Key? key, required this.selectedDate}) : super(key: key);
 
+  late SelectedDate selectedDate;
   @override
   _MyDateState createState() {
     return _MyDateState();
@@ -30,7 +29,7 @@ class MyDate extends StatefulWidget {
 }
 
 class _MyDateState extends State<MyDate> {
-  var selectedDate = SelectedDate();
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -50,7 +49,7 @@ class _MyDateState extends State<MyDate> {
             },
           ),
         ),
-        MyText(text: formatter.format(selectedDate.selectedDate)),
+        MyText(text: formatter.format(widget.selectedDate.selectedDate)),
       ],
     );
   }
@@ -65,9 +64,9 @@ class _MyDateState extends State<MyDate> {
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
               onDateTimeChanged: (value) {
-                if (value.toString() != selectedDate.selectedDate.toString()) {
+                if (value.toString() != widget.selectedDate.selectedDate.toString()) {
                   setState(() {
-                    selectedDate.changeDate(value);
+                    widget.selectedDate.changeDate(value);
                   });
                 }
               },

@@ -27,8 +27,6 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<MyStatefulWidget>  {
-  final _auth = FirebaseAuth.instance;
-  String? errorMessage;
   UserModel userModel = UserModel();
   UserAdapter userAdapter = UserAdapter();
   var firstname = TextEditingController();
@@ -300,9 +298,9 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                       ),
                     ],
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                    child: MyDate(),
+                    child: MyDate(selectedDate: birthdate),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -401,6 +399,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                         userModel.admin = admin;
                         userModel.university = university.text;
                         userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
+                        print(birthdate.selectedDate);
                         userAdapter.signUp(email.text, password.text, userModel, context);
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),

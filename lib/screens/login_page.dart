@@ -7,8 +7,6 @@ import '../adapter/user_adapter.dart';
 import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../entities/user.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,7 +18,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   User? user = FirebaseAuth.instance.currentUser;
-  UserModel loggedInUser = UserModel();
   var email = TextEditingController();
   var password = TextEditingController();
   UserAdapter userAdapter = UserAdapter();

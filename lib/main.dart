@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:stud_iees/adapter/quiz_adapter.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/entities/question.dart';
+import 'adapter/grade_adapter.dart';
 import 'adapter/question_adapter.dart';
 import 'adapter/semester_adapter.dart';
 import 'adapter/user_adapter.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SemesterAdapter>(create: (_) => SemesterAdapter()),
         ChangeNotifierProvider<QuizAdapter>(create: (_) => QuizAdapter()),
         ChangeNotifierProvider<QuestionAdapter>(create: (_) => QuestionAdapter()),
+        ChangeNotifierProvider<GradeAdapter>(create: (_) => GradeAdapter()),
       ],
       child: MaterialApp(
         theme: ThemeData(

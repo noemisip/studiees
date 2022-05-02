@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stud_iees/screens/student/start_task.dart';
+import 'package:stud_iees/screens/teacher/grades_quizes.dart';
 import 'package:stud_iees/screens/teacher/new_quiz.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import '../adapter/quiz_adapter.dart';
@@ -187,6 +188,10 @@ class QuizItem extends StatelessWidget {
         if ( type == false && quiz.questions!.isNotEmpty ){
           showDialog(context: context, builder: (context) => StartTask(selectedQuiz: quiz));
         }
+        if ( type == true && quiz.questions!.isNotEmpty ){
+          showDialog(context: context, builder: (context) => GradePage(selectedQuiz: quiz));
+        }
+
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),

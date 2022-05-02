@@ -61,6 +61,10 @@
   "current_points": "Pontjaid",
   "choose_type": "Válassz típust",
   "choose_semester": "Válassz szemesztert",
-  "deadline": "Határidő"
+  "deadline": "Határidő",
+  "all_tasks": "Feladatok",
+  "zh": "ZH",
+  "exam":"Vizsga",
+  "homework": "Házi feladat"
 
 }

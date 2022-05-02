@@ -197,7 +197,7 @@ class QuizItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(child: MyText(text: quiz.type.toString())),
+                  Expanded(child: MyText(text: getType(quiz.type.toString(), context.locale))),
                   Expanded(child: MyText(text: quiz.name ?? "")),
                   Expanded(child: MyText(text: formatter.format(DateTime.fromMillisecondsSinceEpoch(quiz.deadline?? 0)).toString())),
                 ],
@@ -207,5 +207,24 @@ class QuizItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getType(String type, Locale lang){
+    if(lang == const Locale("hu")){
+      if( type == "Homework"){
+        return "Házi feladat";
+      } else if( type == "Exam"){
+        return "Vizsga";
+      }
+    }
+
+    if(lang == const Locale("en")){
+      if( type == "Házi feladat"){
+        return "Homework";
+      } else if( type == "Vizsga"){
+        return "Exam";
+      }
+    }
+    return type;
   }
 }

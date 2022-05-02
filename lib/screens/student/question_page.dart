@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:stud_iees/adapter/quiz_adapter.dart';
 
 import '../../adapter/question_adapter.dart';
@@ -10,12 +11,12 @@ import '../../entities/quiz.dart';
 import 'end_task.dart';
 
 class QuestionPage extends StatefulWidget {
-  QuestionPage( {Key? key, required this.questionAdapter, required this.next,required this.quizAdapter, required this.points, required this.time, required this.selectedQuiz}) : super(key: key);
+  QuestionPage( {Key? key, required this.questionAdapter, required this.next,required this.quizAdapter, required this.points, required this.endTime, required this.selectedQuiz}) : super(key: key);
 
   final QuizAdapter quizAdapter;
   final QuestionAdapter questionAdapter;
   final QuizModel selectedQuiz;
-  late int time;
+  int endTime;
   late int points;
   late int next;
 
@@ -38,7 +39,6 @@ class _QuestionPageState extends State<QuestionPage>  {
 
   @override
   Widget build(BuildContext context) {
-
 
 
     return Scaffold(
@@ -74,9 +74,6 @@ class _QuestionPageState extends State<QuestionPage>  {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(widget.questionAdapter.currQuestion.points.toString()  + " " + tr("point"),
-                          style: const TextStyle( fontSize: 18,
-                              color: Colors.white, fontWeight: FontWeight.w600)),
-                      Text(widget.time.toString() + " " + tr("minutes"),
                           style: const TextStyle( fontSize: 18,
                               color: Colors.white, fontWeight: FontWeight.w600)),
                     ],
@@ -115,6 +112,17 @@ class _QuestionPageState extends State<QuestionPage>  {
                                 fontWeight: FontWeight.w600))),
                   ],
                 ),
+                SizedBox(height: 20),
+                CountdownTimer(
+                  onEnd: (){
+                    showDialog(context: context, builder: (context) =>
+                        EndTask(points: widget.points, quizAdapter: widget.quizAdapter));
+                  },
+                    endTime: widget.endTime,
+                    textStyle: const TextStyle( fontSize: 25,
+                        color: Colors.white, fontWeight: FontWeight.w800)
+                ),
+                SizedBox(height: 20),
                 CupertinoButton(
                   child: Text(
                     tr("next"),
@@ -129,7 +137,7 @@ class _QuestionPageState extends State<QuestionPage>  {
                     if(widget.quizAdapter.currQuiz.questions!.length > widget.next){
                       widget.questionAdapter.getQuestionByQuiz(widget.quizAdapter.currQuiz.questions![widget.next]).whenComplete(() => {
                         showDialog(context: context, builder: (context) =>
-                            QuestionPage(selectedQuiz: widget.selectedQuiz, time:  widget.selectedQuiz.time?? 0,
+                            QuestionPage(selectedQuiz: widget.selectedQuiz, endTime:  widget.endTime,
                                 points: widget.points, next: widget.next, quizAdapter: widget.quizAdapter, questionAdapter: widget.questionAdapter))
                       });
                     } else {

@@ -91,7 +91,7 @@ class _QuizModelState extends State<StartTask>  {
                   color: Colors.white,
                   onPressed: () {
                       showDialog(context: context, builder: (context) {
-                        return QuestionPage(selectedQuiz: widget.selectedQuiz, time:  widget.selectedQuiz.time?? 0,
+                        return QuestionPage(selectedQuiz: widget.selectedQuiz, endTime: DateTime.now().millisecondsSinceEpoch + 1000 * 60 * (widget.selectedQuiz.time ?? 0),
                             points: 0, next: 0, quizAdapter: quizAdapter, questionAdapter: questionAdapter);
                       }
                       );

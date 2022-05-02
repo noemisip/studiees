@@ -61,5 +61,9 @@
   "current_points": "Current points",
   "choose_type": "Choose type",
   "choose_semester": "Choose semester",
-  "deadline": "Deadline"
+  "deadline": "Deadline",
+  "all_tasks": "All tasks",
+  "zh": "ZH",
+  "exam":"Exam",
+  "homework": "Homework"
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _AllTasksState extends State<AllTasks>  {
         appBar: AppBar(
             backgroundColor: MyColors.background1,
             centerTitle: true,
-            title: Text("All Tasks",
+            title: Text(tr("all_tasks"),
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w800)),
             leading: CupertinoButton(

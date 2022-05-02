@@ -19,9 +19,9 @@ class MyTypePicker extends StatefulWidget {
 
 class _MyPickerState extends State<MyTypePicker> {
   List <Text> types = [
-    Text("ZH"),
-    Text("Vizsga"),
-    Text("Házi feladat"),
+    Text(tr("zh")),
+    Text(tr("exam")),
+    Text(tr("homework")),
   ];
  // String selectedValue = "";
 

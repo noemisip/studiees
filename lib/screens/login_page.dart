@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.white, fontWeight: FontWeight.w800),
                       ),
                       onPressed: () {
-                        context.locale = const Locale('en');
+                        context.setLocale(const Locale('en'));
                       },
                     ),
                     const Text("/", style: TextStyle(color: Colors.white)),
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.white, fontWeight: FontWeight.w800),
                       ),
                       onPressed: () {
-                        context.locale = const Locale('hu');
+                        context.setLocale(const Locale('hu'));
                       },
                     ),
                   ],

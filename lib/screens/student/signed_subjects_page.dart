@@ -23,26 +23,23 @@ class SignedSubjectPage extends StatefulWidget {
   _SignedSubjectPageState createState() => _SignedSubjectPageState();
 }
 
-UserModel loggedInUser = UserModel();
-SubjectAdapter subjectAdapter = SubjectAdapter();
-UserAdapter userAdapter = UserAdapter();
 
 class _SignedSubjectPageState extends State<SignedSubjectPage> {
   User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+  SubjectAdapter subjectAdapter = SubjectAdapter();
+  UserAdapter userAdapter = UserAdapter();
+
+
   @override
   initState()  {
     super.initState();
-    FirebaseFirestore.instance
-        .collection("Users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-      subjectAdapter = context.read<SubjectAdapter>();
-      userAdapter = context.read<UserAdapter>();
-      subjectAdapter.getSubjectsBySignedUp(loggedInUser).whenComplete(() {
-        setState(() {
-        });
+    userAdapter = context.read<UserAdapter>();
+    subjectAdapter = context.read<SubjectAdapter>();
+    userAdapter.getCurrentUser(context).whenComplete((){
+      loggedInUser = userAdapter.currentUser;
+      setState(() {
+        subjectAdapter.getSubjectsBySignedUp(loggedInUser);
       });
     });
   }
@@ -72,18 +69,18 @@ class _SignedSubjectPageState extends State<SignedSubjectPage> {
                 colors: [MyColors.background1, MyColors.background2])),
         child:  Column(
           children: [
-            MyPicker(""),
+            MyPicker("", signedup: true),
             Expanded(
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 body: Consumer<SubjectAdapter>(
-                  builder: (context, subjectAdapter,child) => subjectAdapter.subjects.isEmpty
+                  builder: (context, subjectAdapter,child) => subjectAdapter.ended == false
                       ? const LoadingIndicator()
                       : ListView.builder(
                       itemCount: subjectAdapter.subjects.length ?? 0,
                       padding: const EdgeInsets.all(20),
                       itemBuilder: (context, index) =>
-                          SubjectItem(subject: subjectAdapter.subjects[index], function: "-")),
+                          SubjectItem(subject: subjectAdapter.subjects[index], function: "-", currloggedInUser: loggedInUser, subjectAdapter: subjectAdapter,)),
                 ),
               ),
             ),

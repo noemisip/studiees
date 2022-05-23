@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/grade_adapter.dart';
 import 'package:stud_iees/adapter/quiz_adapter.dart';
 import '../../adapter/user_adapter.dart';
 import '../../app_router.dart';
 import '../../colors.dart';
 import '../../entities/grade.dart';
+import '../../entities/user.dart';
 
 
 class EndTask extends StatefulWidget {
@@ -25,10 +27,17 @@ class EndTask extends StatefulWidget {
 class _EndTaskState extends State<EndTask> {
 
   UserAdapter userAdapter = UserAdapter();
+  UserModel loggedInUser = UserModel();
+
   @override
   void initState() {
     super.initState();
-    userAdapter.getCurrentUser(context);
+    userAdapter = context.read<UserAdapter>();
+    userAdapter.getCurrentUser(context).whenComplete((){
+      loggedInUser = userAdapter.currentUser;
+      setState(() {
+      });
+    });
   }
 
   int getGrade(int result) {

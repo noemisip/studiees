@@ -36,7 +36,6 @@ Future<void> main() async {
   initScreen =  AppRouter.login;
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

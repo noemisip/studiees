@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import '../adapter/user_adapter.dart';
 import '../colors.dart';
@@ -26,12 +27,9 @@ class _InfoPageState extends State<InfoPage> {
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance
-        .collection("Users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
+    userAdapter = context.read<UserAdapter>();
+    userAdapter.getCurrentUser(context).whenComplete((){
+      loggedInUser = userAdapter.currentUser;
       setState(() {
       });
     });

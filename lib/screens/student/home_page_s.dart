@@ -6,6 +6,7 @@ import 'package:stud_iees/screens/student/signed_subjects_page.dart';
 import 'package:stud_iees/screens/subjects_page.dart';
 
 import 'all_tasks.dart';
+import 'grades_page.dart';
 
 
 class StudentHomeScreen extends StatelessWidget {
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<_HomeScreen> {
       body: SubjectPage()
     ),
     Scaffold(
-      body: InfoPage(),
+      body: GradesPage(),
     ),
     Scaffold(
       body: AllTasks(),

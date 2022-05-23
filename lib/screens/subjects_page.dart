@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
 import 'package:stud_iees/screens/selected_subject_page.dart';
+import 'package:stud_iees/screens/student/signed_subjects_page.dart';
 import 'package:stud_iees/screens/teacher/new_quiz.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import 'package:stud_iees/widget/my_picker_semester.dart';
@@ -24,31 +25,31 @@ class SubjectPage extends StatefulWidget {
   _SubjectPageState createState() => _SubjectPageState();
 }
 
-UserModel loggedInUser = UserModel();
-SubjectAdapter subjectAdapter = SubjectAdapter();
-UserAdapter userAdapter = UserAdapter();
 
 class _SubjectPageState extends State<SubjectPage> {
   User? user = FirebaseAuth.instance.currentUser;
+
+  UserModel loggedInUser = UserModel();
+  SubjectAdapter subjectAdapter = SubjectAdapter();
+  UserAdapter userAdapter = UserAdapter();
+
   @override
    initState()  {
     super.initState();
-   FirebaseFirestore.instance
-        .collection("Users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-      subjectAdapter = context.read<SubjectAdapter>();
-      if(loggedInUser.role == true){
-        subjectAdapter.getSubjectsById(loggedInUser.uid!);
-      }
-      else if ( loggedInUser.role == false){
-        subjectAdapter.getSubjectsByUniversity(loggedInUser);
-      }
+    userAdapter = context.read<UserAdapter>();
+    subjectAdapter = context.read<SubjectAdapter>();
+    userAdapter.getCurrentUser(context).whenComplete((){
+      loggedInUser = userAdapter.currentUser;
       setState(() {
+        if(loggedInUser.role == true){
+          subjectAdapter.getSubjectsById(loggedInUser.uid!);
+        }
+        else if ( loggedInUser.role == false){
+          subjectAdapter.getSubjectsByUniversity(loggedInUser);
+        }
       });
     });
+
   }
 
   @override
@@ -76,7 +77,7 @@ class _SubjectPageState extends State<SubjectPage> {
                 colors: [MyColors.background1, MyColors.background2])),
         child:  Column(
           children: [
-            MyPicker(""),
+            MyPicker("",signedup: false),
             Expanded(
               child: Scaffold(
                       backgroundColor: Colors.transparent,
@@ -87,7 +88,7 @@ class _SubjectPageState extends State<SubjectPage> {
                             itemCount: subjectAdapter.subjects.length ?? 0,
                             padding: const EdgeInsets.all(20),
                             itemBuilder: (context, index) =>
-                                SubjectItem(subject: subjectAdapter.subjects[index], function: "+",)),
+                                SubjectItem(subject: subjectAdapter.subjects[index], function: "+",currloggedInUser: loggedInUser, subjectAdapter: subjectAdapter,)),
                       ),
                     ),
             ),
@@ -99,17 +100,20 @@ class _SubjectPageState extends State<SubjectPage> {
 }
 
 class SubjectItem extends StatelessWidget {
-  const SubjectItem({Key? key, required this.subject, required this.function}) : super(key: key);
+  const SubjectItem({Key? key, required this.currloggedInUser, required this.subject, required this.function, required this.subjectAdapter}) : super(key: key);
 
   final SubjectModel subject;
   final String function;
+  final UserModel currloggedInUser;
+  final SubjectAdapter subjectAdapter;
+
 
   @override
   Widget build(BuildContext context) {
 
     return GestureDetector(
       onTap: (){
-          showDialog(context: context, builder: (context) => SelectedSubject(selectedSubeject: subject));
+          showDialog(context: context, builder: (context) => SelectedSubject(selectedSubject: subject, function: function));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -124,7 +128,7 @@ class SubjectItem extends StatelessWidget {
                   text: subject.current_part.toString() +
                       "/" +
                       subject.limit.toString()),
-              if(loggedInUser.role == false) Row(
+              if(currloggedInUser.role == false) Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 20),
@@ -148,7 +152,6 @@ class SubjectItem extends StatelessWidget {
                   ),
                 ],
               ),
-
             ],
           ),
         ),
@@ -156,3 +159,4 @@ class SubjectItem extends StatelessWidget {
     );
   }
 }
+

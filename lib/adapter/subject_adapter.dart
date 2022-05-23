@@ -11,6 +11,21 @@ class SubjectAdapter extends ChangeNotifier {
   UserAdapter userAdapter = UserAdapter();
   List<SubjectModel> subjects = [];
   List<QuizModel> quizes = [];
+  SubjectModel currSubj = SubjectModel();
+
+
+  Future<void> getCurrSubjectById (String sid) async{
+    ended = false;
+    await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: sid).get().then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        SubjectModel model = SubjectModel.fromMap(result);
+        currSubj = model;
+      });
+    });
+    print("adapter"+ currSubj.name!);
+    notifyListeners();
+    ended = true;
+  }
 
   Future<void> getSubjectsById( String id) async {
      ended = false;
@@ -20,9 +35,10 @@ class SubjectAdapter extends ChangeNotifier {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    }).whenComplete(() => ended = true);
+    });
     subjects = temp;
     notifyListeners();
+     ended = true;
   }
 
 
@@ -34,9 +50,10 @@ class SubjectAdapter extends ChangeNotifier {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    }).whenComplete(() => ended = true);
+    });
     subjects = temp;
     notifyListeners();
+     ended = true;
   }
 
   Future<void> getSubjectsBySemester( UserModel user) async {
@@ -47,9 +64,10 @@ class SubjectAdapter extends ChangeNotifier {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    }).whenComplete(() => ended = true);
+    });
     subjects = temp;
     notifyListeners();
+     ended = true;
   }
 
   Future<void> getSubjectsByUniversity( UserModel user) async {
@@ -60,9 +78,10 @@ class SubjectAdapter extends ChangeNotifier {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
       });
-    }).whenComplete(() => ended = true);
+    });
     subjects = temp;
     notifyListeners();
+     ended = true;
   }
 
   Future<void> getSubjectsBySignedUp( UserModel user) async {
@@ -78,11 +97,34 @@ class SubjectAdapter extends ChangeNotifier {
             SubjectModel model = SubjectModel.fromMap(result);
             temp.add(model);
           });
-        }).whenComplete(() => ended = true);
+        });
       }
       subjects = temp;
     }
     notifyListeners();
+    ended = true;
+  }
+
+  Future<void> getSubjectsBySignedUpBySemester ( UserModel user, String semester) async{
+    ended = false;
+    List<String>? signedUpSubjects = [];
+    signedUpSubjects = user.subjects;
+    List<SubjectModel> temp = [];
+
+    if( signedUpSubjects != null){
+      for( var subject in signedUpSubjects){
+        await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: subject).where("semester", isEqualTo: semester).get().then((value) {
+          value.docs.forEach((result) {
+            SubjectModel model = SubjectModel.fromMap(result);
+            temp.add(model);
+          });
+        });
+      }
+      subjects = temp;
+    }
+    notifyListeners();
+    ended = true;
+
   }
 
   Future<void> getAllTasks(UserModel user) async{
@@ -96,11 +138,11 @@ class SubjectAdapter extends ChangeNotifier {
           QuizModel model = QuizModel.fromMap(result);
           temp.add(model);
         });
-      }).whenComplete(() => ended = true);
+      });
       quizes = temp;
     }
-    print(quizes.length);
     notifyListeners();
+    ended = true;
   }
 
   Future changeSubject (SubjectModel subject, BuildContext context) async{
@@ -114,10 +156,17 @@ class SubjectAdapter extends ChangeNotifier {
 
     int count = subject.current_part ?? 0;
     userAdapter.getCurrentUser(context).whenComplete(() {
-      bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
+      bool alreadySignedUp;
+      if(userAdapter.currentUser.subjects != null){
+        alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
+      }
+      else{
+        alreadySignedUp = false;
+      }
       if( subject.limit! > count && !alreadySignedUp){
         count++;
         subject.current_part = count;
+        print(subject.current_part);
         changeSubject(subject, context);
         userAdapter.addSubjectToUser(userAdapter.currentUser, subject.sid!, context);
       }
@@ -135,12 +184,9 @@ class SubjectAdapter extends ChangeNotifier {
         await changeSubject(subject, context);
         print("**");
         print(userAdapter.currentUser.subjects);
-        await userAdapter.removeSubjectFromUser(userAdapter.currentUser, subject.sid!, context);
-        await getSubjectsBySignedUp(userAdapter.currentUser);
-        notifyListeners();
+        await userAdapter.removeSubjectFromUser(userAdapter.currentUser, subject.sid!, context).whenComplete(() => getSubjectsBySignedUp(userAdapter.currentUser));
       }
     });
-
     notifyListeners();
   }
 

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/adapter/user_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
@@ -31,19 +32,17 @@ class _AddPageState extends State<AddPage> {
   String? errorMessage;
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
-  var semesterPicker = MyPicker("");
+  var semesterPicker = MyPicker("", signedup: false);
 
 
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance
-        .collection("Users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-      setState(() {});
+    userAdapter = context.read<UserAdapter>();
+    userAdapter.getCurrentUser(context).whenComplete((){
+      loggedInUser = userAdapter.currentUser;
+      setState(() {
+      });
     });
   }
 

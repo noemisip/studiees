@@ -14,6 +14,7 @@ class UserAdapter extends ChangeNotifier {
   late UserModel currentUser;
   List<String> subjects = [];
    UserModel subjTeacher = UserModel();
+   bool loading = false;
 
   Future<void> getUsers() async {
     List<UserModel> temp = [];
@@ -43,8 +44,9 @@ class UserAdapter extends ChangeNotifier {
         .pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
   }
 
-  Future getCurrentUser(BuildContext context) async {
-    User? user = _auth.currentUser;
+  Future<void> getCurrentUser(BuildContext context) async {
+    loading = false;
+    User? user =  _auth.currentUser;
     if (user != null) {
       UserModel loggedInUser = UserModel();
       await FirebaseFirestore.instance
@@ -57,6 +59,7 @@ class UserAdapter extends ChangeNotifier {
       currentUser = loggedInUser;
     }
     notifyListeners();
+    loading = true;
   }
 
   Future<void> getTeacherById( String tid,BuildContext context) async{

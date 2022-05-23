@@ -51,6 +51,15 @@ class QuizAdapter extends ChangeNotifier{
         currQuiz = QuizModel.fromMap(result);
       });
     });
+    print("====" + currQuiz.name!);
+    notifyListeners();
+  }
+
+
+
+  void deleteQuizAfterExpired(String id, String subjid) async{
+    await firebaseFirestore.collection("Quizes").doc(id).delete();
+    getQuizesBySubject(subjid);
     notifyListeners();
   }
 

@@ -1,12 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/grade_adapter.dart';
 import 'package:stud_iees/adapter/quiz_adapter.dart';
-import 'package:stud_iees/screens/student/question_page.dart';
-
 import '../../adapter/user_adapter.dart';
 import '../../colors.dart';
 import '../../entities/quiz.dart';
@@ -40,19 +37,24 @@ class _QuizModelState extends State<GradePage>  {
 
     userAdapter = context.read<UserAdapter>();
     gradeAdapter = context.read<GradeAdapter>();
+    quizAdapter= context.read<QuizAdapter>();
     userAdapter.getUsers();
     userAdapter.users.forEach((user) {
-      gradeAdapter.getGradeByUidQid(user.uid!, widget.selectedQuiz.id!, context);
-      gradeAdapter.userIds.forEach((uid) {
-        if ( uid == user.uid )
+      gradeAdapter.getGradeByUidQid(user.uid!, widget.selectedQuiz.id!, context).whenComplete(() {
+        gradeAdapter.userIds.forEach((uid) {
+          if ( uid == user.uid )
           {
             names.add(user.name!);
+            print("==" + user.name!);
+            setState(() {
+            });
+
           }
+        });
+        quizAdapter.getCurrQuiz(widget.selectedQuiz.id!);
+
       });
     });
-
-    quizAdapter= context.read<QuizAdapter>();
-    quizAdapter.getCurrQuiz(widget.selectedQuiz.id!);
 
   }
 
@@ -79,12 +81,12 @@ class _QuizModelState extends State<GradePage>  {
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.transparent,
-            body:     Container(
+            body: Container(
               height:  MediaQuery.of(context).size.height / 2,
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 body: Consumer<GradeAdapter>(
-                  builder: (context, gradeAdapter,child) => gradeAdapter.grades.isEmpty
+                  builder: (context, gradeAdapter,child) => gradeAdapter.ended == false
                       ? const LoadingIndicator()
                       : ListView.builder(
                       itemCount: gradeAdapter.grades.length,

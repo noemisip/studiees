@@ -40,9 +40,6 @@ class _HomeScreenState extends State<_HomeScreen> {
     Scaffold(
       body: InfoPage(),
     ),
-    Scaffold(
-      body: InfoPage(),
-    ),
   ];
 
   void _onItemTapped(int index) {
@@ -69,10 +66,6 @@ class _HomeScreenState extends State<_HomeScreen> {
           BottomNavigationBarItem(
             icon: const Icon(Icons.add),
             label: tr("new_subject"),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.book),
-            label: tr("diary"),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.info),

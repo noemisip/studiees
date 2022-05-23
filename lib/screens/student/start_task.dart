@@ -31,7 +31,6 @@ class _QuizModelState extends State<StartTask>  {
     super.initState();
     quizAdapter= context.read<QuizAdapter>();
     questionAdapter= context.read<QuestionAdapter>();
-
     quizAdapter.getCurrQuiz(widget.selectedQuiz.id!).whenComplete(() =>
         questionAdapter.getQuestionByQuiz(quizAdapter.currQuiz.questions![0]));
 

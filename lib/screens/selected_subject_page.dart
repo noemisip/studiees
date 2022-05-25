@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,17 +17,16 @@ import '../adapter/user_adapter.dart';
 import '../widget/my_text.dart';
 import '../widget/rounded_shadow_view.dart';
 
-
 class SelectedSubject extends StatefulWidget {
-  const SelectedSubject( {Key? key, required this.selectedSubject, required this.function}) : super(key: key);
+  const SelectedSubject(
+      {Key? key, required this.selectedSubject, required this.function})
+      : super(key: key);
 
   final SubjectModel selectedSubject;
   final String function;
 
-
   @override
-  _SelectedSubjectPageState createState()
-  {
+  _SelectedSubjectPageState createState() {
     return _SelectedSubjectPageState();
   }
 }
@@ -37,16 +34,11 @@ class SelectedSubject extends StatefulWidget {
 final DateFormat formatter = DateFormat('yyyy-MM-dd');
 GradeAdapter gradeAdapter = GradeAdapter();
 
-
-class _SelectedSubjectPageState extends State<SelectedSubject>  {
-  String? errorMessage;
-  UserModel userModel = UserModel();
+class _SelectedSubjectPageState extends State<SelectedSubject> {
   UserAdapter userAdapter = UserAdapter();
   UserModel loggedInUser = UserModel();
   QuizAdapter quizAdapter = QuizAdapter();
   SubjectAdapter subjectAdapter = SubjectAdapter();
-
-  User? user = FirebaseAuth.instance.currentUser;
 
   _SelectedSubjectPageState();
 
@@ -57,14 +49,16 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
     gradeAdapter = context.read<GradeAdapter>();
     subjectAdapter = context.read<SubjectAdapter>();
     quizAdapter = context.read<QuizAdapter>();
-    userAdapter.getCurrentUser(context).whenComplete((){
+    userAdapter.getCurrentUser(context).whenComplete(() {
       loggedInUser = userAdapter.currentUser;
-      setState(() {
-      });
-      userAdapter.getTeacherById(widget.selectedSubject.tid?? "", context).then((value) {
-        quizAdapter.getQuizesBySubject(widget.selectedSubject.sid??"").whenComplete(() {
-          setState(() {
-          });
+      setState(() {});
+      userAdapter
+          .getTeacherById(widget.selectedSubject.tid ?? "", context)
+          .then((value) {
+        quizAdapter
+            .getQuizesBySubject(widget.selectedSubject.sid ?? "")
+            .whenComplete(() {
+          setState(() {});
         });
       });
     });
@@ -72,25 +66,30 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
 
   @override
   Widget build(BuildContext context) {
-
-    quizAdapter.quizes.forEach((quiz) {
-      if(quiz.deadline! < DateTime.now().millisecondsSinceEpoch - const Duration(days: 1).inMilliseconds){
-        quizAdapter.deleteQuizAfterExpired(quiz.id!, widget.selectedSubject.sid!);
+    for (var quiz in quizAdapter.quizes) {
+      if (quiz.deadline! <
+          DateTime.now().millisecondsSinceEpoch -
+              const Duration(days: 1).inMilliseconds) {
+        quizAdapter.deleteQuizAfterExpired(
+            quiz.id!, widget.selectedSubject.sid!);
       }
-    });
+    }
 
     return Scaffold(
         appBar: AppBar(
             backgroundColor: MyColors.background1,
             centerTitle: true,
-            title: Text(widget.selectedSubject.name?? "",
+            title: Text(widget.selectedSubject.name ?? "",
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w800)),
             leading: CupertinoButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Icon(Icons.arrow_back, color: Colors.white,))), //leading: Image.asset(Images.pngImgPath('sun'))),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ))), //leading: Image.asset(Images.pngImgPath('sun'))),
         body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -107,84 +106,109 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
                   Padding(
                     padding: const EdgeInsets.all(15),
                     child: Text(widget.selectedSubject.semester.toString(),
-                        style: const TextStyle( fontSize: 18,
-                            color: Colors.white, fontWeight: FontWeight.w800)),
+                        style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800)),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(widget.selectedSubject.credit.toString()+" " +tr("credit"),
-                            style: const TextStyle( fontSize: 18,
-                                color: Colors.white, fontWeight: FontWeight.w800)),
-                        Text(widget.selectedSubject.current_part.toString()+"/"+widget.selectedSubject.limit.toString()+" "+tr("students"),
-                            style: const TextStyle( fontSize: 18,
-                                color: Colors.white, fontWeight: FontWeight.w800)),
+                        Text(
+                            widget.selectedSubject.credit.toString() +
+                                " " +
+                                tr("credit"),
+                            style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800)),
+                        Text(
+                            widget.selectedSubject.currentPart.toString() +
+                                "/" +
+                                widget.selectedSubject.limit.toString() +
+                                " " +
+                                tr("students"),
+                            style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800)),
                       ],
                     ),
                   ),
-                  Text(userAdapter.subjTeacher.name?? "",
-                      style: const TextStyle( fontSize: 18,
-                          color: Colors.white, fontWeight: FontWeight.w800)),
-                  if(widget.function == "-" || loggedInUser.role == true)
+                  Text(userAdapter.subjTeacher.name ?? "",
+                      style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800)),
+                  if (widget.function == "-" || loggedInUser.role == true)
                     Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(tr("quizes"),
-                            style: const TextStyle( fontSize: 18,
-                                color: Colors.white, fontWeight: FontWeight.w800)),
-                      ),
-                    ],
-                  ),
-                  if(loggedInUser.role == true)
-                    Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: CupertinoButton(
-                      child: Text(
-                        tr("create_quiz"),
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w600),
-                      ),
-                      color: Colors.white,
-                      onPressed: () {
-                        showDialog(context: context, builder: (context) => NewQuizPage(subject: widget.selectedSubject));
-                      },
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    ),
-                  ),
-                  if(widget.function == "-" || loggedInUser.role == true)
-                   Padding(
-                     padding: EdgeInsets.symmetric(vertical: 10),
-                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        MyText(text: tr("type")),
-                        MyText(text: tr("name")),
-                        MyText(text: tr("deadline")),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(tr("quizes"),
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800)),
+                        ),
                       ],
-                  ),
-                   ),
-                  if(widget.function == "-" || loggedInUser.role == true)
+                    ),
+                  if (loggedInUser.role == true)
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: CupertinoButton(
+                        child: Text(
+                          tr("create_quiz"),
+                          style: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w600),
+                        ),
+                        color: MyColors.tabBarColor,
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  NewQuizPage(subject: widget.selectedSubject));
+                        },
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
+                      ),
+                    ),
+                  if (widget.function == "-" || loggedInUser.role == true)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MyText(text: tr("type")),
+                          MyText(text: tr("name")),
+                          MyText(text: tr("deadline")),
+                        ],
+                      ),
+                    ),
+                  if (widget.function == "-" || loggedInUser.role == true)
                     Container(
-                    height:  MediaQuery.of(context).size.height / 2,
+                      height: MediaQuery.of(context).size.height / 2,
                       child: Scaffold(
                         backgroundColor: Colors.transparent,
                         body: Consumer<QuizAdapter>(
-                          builder: (context, quizAdapter,child) => quizAdapter.ended == false
-                              ? const LoadingIndicator()
-                              : ListView.builder(
-                              itemCount: quizAdapter.quizes.length ?? 0,
-                              padding: const EdgeInsets.all(20),
-                              itemBuilder: (context, index) =>
-                                  QuizItem(subjectAdapter, quiz: quizAdapter.quizes[index], type: loggedInUser.role?? false, user: loggedInUser)),
+                          builder: (context, quizAdapter, child) =>
+                              quizAdapter.ended == false
+                                  ? const LoadingIndicator()
+                                  : ListView.builder(
+                                      itemCount: quizAdapter.quizes.length,
+                                      padding: const EdgeInsets.all(20),
+                                      itemBuilder: (context, index) => QuizItem(
+                                          subjectAdapter,
+                                          quiz: quizAdapter.quizes[index],
+                                          type: loggedInUser.role ?? false,
+                                          user: loggedInUser)),
                         ),
                       ),
-
-                  ),
+                    ),
                 ],
               ),
             ),
@@ -194,39 +218,38 @@ class _SelectedSubjectPageState extends State<SelectedSubject>  {
 }
 
 class QuizItem extends StatelessWidget {
-  QuizItem(this.subjectAdapter,{Key? key, required this.quiz, required this.type, required this.user}) : super(key: key);
+  QuizItem(this.subjectAdapter,
+      {Key? key, required this.quiz, required this.type, required this.user})
+      : super(key: key);
 
   final QuizModel quiz;
   final bool type;
   final UserModel user;
   late SubjectAdapter subjectAdapter;
 
-
   @override
   Widget build(BuildContext context) {
-
     bool finished = false;
     gradeAdapter.getAllGrades();
-    gradeAdapter.allgrades.forEach((grade) {
-      if(grade.qid == quiz.id && grade.uid == user.uid){
+    for (var grade in gradeAdapter.allGrades) {
+      if (grade.qid == quiz.id && grade.uid == user.uid) {
         finished = true;
       }
-    });
-
-    // if( user.role == false){
-    //   subjectAdapter.getCurrSubjectById(quiz.subjid!);
-    // }
-
+    }
 
     return GestureDetector(
-      onTap: (){
-        if ( type == false && quiz.questions!.isNotEmpty ){
-          if ( finished == false){
-            showDialog(context: context, builder: (context) => StartTask(selectedQuiz: quiz));
+      onTap: () {
+        if (type == false && quiz.questions!.isNotEmpty) {
+          if (finished == false) {
+            showDialog(
+                context: context,
+                builder: (context) => StartTask(selectedQuiz: quiz));
           }
         }
-        if ( type == true && quiz.questions!.isNotEmpty ){
-          showDialog(context: context, builder: (context) => GradePage(selectedQuiz: quiz));
+        if (type == true && quiz.questions!.isNotEmpty) {
+          showDialog(
+              context: context,
+              builder: (context) => GradePage(selectedQuiz: quiz));
         }
       },
       child: Padding(
@@ -235,22 +258,30 @@ class QuizItem extends StatelessWidget {
           backgroundColor: MyColors.tabBarColor,
           child: Column(
             children: [
-             //  if( user. role == false)
-             // MyText(fontsize: 17,text: subjectAdapter.currSubj.name!),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(child: MyText(fontsize: 17,text: getType(quiz.type.toString(), context.locale))),
-                  Expanded(child: MyText(fontsize: 17,text: quiz.name ?? "")),
-                  Expanded(child: MyText(fontsize: 17,text: formatter.format(DateTime.fromMillisecondsSinceEpoch(quiz.deadline?? 0)).toString())),
-                  if( finished == true) const Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.white,
-                      size: 20.0,
+                  Expanded(
+                      child: MyText(
+                          fontSize: 17,
+                          text: getType(quiz.type.toString(), context.locale))),
+                  Expanded(child: MyText(fontSize: 17, text: quiz.name ?? "")),
+                  Expanded(
+                      child: MyText(
+                          fontSize: 17,
+                          text: formatter
+                              .format(DateTime.fromMillisecondsSinceEpoch(
+                                  quiz.deadline ?? 0))
+                              .toString())),
+                  if (finished == true)
+                    const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.white,
+                        size: 20.0,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ],
@@ -260,19 +291,19 @@ class QuizItem extends StatelessWidget {
     );
   }
 
-  String getType(String type, Locale lang){
-    if(lang == const Locale("hu")){
-      if( type == "Homework"){
+  String getType(String type, Locale lang) {
+    if (lang == const Locale("hu")) {
+      if (type == "Homework") {
         return "Házi feladat";
-      } else if( type == "Exam"){
+      } else if (type == "Exam") {
         return "Vizsga";
       }
     }
 
-    if(lang == const Locale("en")){
-      if( type == "Házi feladat"){
+    if (lang == const Locale("en")) {
+      if (type == "Házi feladat") {
         return "Homework";
-      } else if( type == "Vizsga"){
+      } else if (type == "Vizsga") {
         return "Exam";
       }
     }

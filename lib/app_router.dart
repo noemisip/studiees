@@ -13,8 +13,8 @@ class AppRouter {
   static const initialRoute = "/";
   static const login = "login";
   static const register = "register";
-  static const student_home = "studenthome";
-  static const teacher_home = "teacherhome";
+  static const studentHome = "studenthome";
+  static const teacherHome = "teacherhome";
   static const admin = "admin";
 
   static Route<dynamic> generator(RouteSettings routeSettings) {
@@ -28,9 +28,9 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => const LoginPage(),settings: routeSettings);
       case register:
         return MaterialPageRoute(builder: (context) => const RegisterPage(),settings: routeSettings);
-      case teacher_home:
+      case teacherHome:
         return MaterialPageRoute(builder: (context) => const TeacherHomeScreen(),settings: routeSettings);
-      case student_home:
+      case studentHome:
         return MaterialPageRoute(builder: (context) => const StudentHomeScreen(),settings: routeSettings);
       case admin:
         return MaterialPageRoute(builder: (context) => const AdminPage(),settings: routeSettings);

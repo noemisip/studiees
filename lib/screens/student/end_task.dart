@@ -10,7 +10,6 @@ import '../../colors.dart';
 import '../../entities/grade.dart';
 import '../../entities/user.dart';
 
-
 class EndTask extends StatefulWidget {
   EndTask({Key? key, required this.quizAdapter, required this.points})
       : super(key: key);
@@ -25,7 +24,6 @@ class EndTask extends StatefulWidget {
 }
 
 class _EndTaskState extends State<EndTask> {
-
   UserAdapter userAdapter = UserAdapter();
   UserModel loggedInUser = UserModel();
 
@@ -33,10 +31,9 @@ class _EndTaskState extends State<EndTask> {
   void initState() {
     super.initState();
     userAdapter = context.read<UserAdapter>();
-    userAdapter.getCurrentUser(context).whenComplete((){
+    userAdapter.getCurrentUser(context).whenComplete(() {
       loggedInUser = userAdapter.currentUser;
-      setState(() {
-      });
+      setState(() {});
     });
   }
 
@@ -58,13 +55,13 @@ class _EndTaskState extends State<EndTask> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: MyColors.background1,
-            centerTitle: true,
-            title: Text(widget.quizAdapter.currQuiz.name ?? "",
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w800)),
+          backgroundColor: MyColors.background1,
+          centerTitle: true,
+          title: Text(widget.quizAdapter.currQuiz.name ?? "",
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.w800)),
           automaticallyImplyLeading: false,
-            ),
+        ),
         body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -93,7 +90,8 @@ class _EndTaskState extends State<EndTask> {
                       child: Text(
                           (widget.points.toString() +
                               " / " +
-                              widget.quizAdapter.currQuiz.maxPoints.toString() +" " +
+                              widget.quizAdapter.currQuiz.maxPoints.toString() +
+                              " " +
                               tr("points")),
                           style: const TextStyle(
                               fontSize: 25,
@@ -117,9 +115,14 @@ class _EndTaskState extends State<EndTask> {
                     Padding(
                       padding: const EdgeInsets.all(15),
                       child: Text(
-                          tr("your_grade") + ": "+ getGrade((widget.points /
-                              widget.quizAdapter.currQuiz.maxPoints! *
-                              100).toInt()).toString(),
+                          tr("your_grade") +
+                              ": " +
+                              getGrade((widget.points /
+                                          widget
+                                              .quizAdapter.currQuiz.maxPoints! *
+                                          100)
+                                      .toInt())
+                                  .toString(),
                           style: const TextStyle(
                               fontSize: 25,
                               color: Colors.white,
@@ -135,17 +138,17 @@ class _EndTaskState extends State<EndTask> {
                       ),
                       color: Colors.white,
                       onPressed: () {
-
                         GradeAdapter gradeAdapter = GradeAdapter();
                         GradeModel grade = GradeModel();
                         grade.qid = widget.quizAdapter.currQuiz.id;
                         grade.grade = getGrade((widget.points /
-                            widget.quizAdapter.currQuiz.maxPoints! *
-                            100).toInt());
+                                widget.quizAdapter.currQuiz.maxPoints! *
+                                100)
+                            .toInt());
                         grade.uid = userAdapter.currentUser.uid;
                         gradeAdapter.addGrade(grade, context);
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            AppRouter.student_home, (route) => false);
+                            AppRouter.studentHome, (route) => false);
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),

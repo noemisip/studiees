@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -128,7 +127,7 @@ class SubjItem extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(child: MyText(fontsize: 17,text: name)),
+            Expanded(child: MyText(fontSize: 17,text: name)),
           ],
         ),
       ],

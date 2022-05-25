@@ -1,13 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stud_iees/helpers/picturehelper.dart';
 import '../app_router.dart';
 import '../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../entities/user.dart';
 import '../widget/my_date.dart';
 import '../adapter/user_adapter.dart';
+
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
@@ -26,7 +25,7 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<MyStatefulWidget>  {
+class _RegisterPageState extends State<MyStatefulWidget> {
   UserModel userModel = UserModel();
   UserAdapter userAdapter = UserAdapter();
   var firstname = TextEditingController();
@@ -44,12 +43,6 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: MyColors.background1,
-          title: Container(
-              alignment: Alignment.center,
-              height: MediaQuery.of(context).size.height,
-              width: 50,
-              child:
-                  IntrinsicWidth(child: Image.asset(Images.pngImgPath('mortarboard')))),
           leading: CupertinoNavigationBarBackButton(
             color: Colors.white,
             onPressed: () {
@@ -87,7 +80,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const  EdgeInsets.only(left: 5),
+                        padding: const EdgeInsets.only(left: 5),
                         child: Text(tr("firstname"),
                             style: const TextStyle(
                                 fontSize: 15,
@@ -299,7 +292,7 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                     child: MyDate(selectedDate: birthdate),
                   ),
                   Row(
@@ -388,9 +381,9 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                       child: Text(
                         tr("register"),
                         style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w600),
+                            color: Colors.white, fontWeight: FontWeight.w600),
                       ),
-                      color: Colors.white,
+                      color: MyColors.tabBarColor,
                       onPressed: () {
                         userModel.username = username.text;
                         userModel.name = firstname.text + " " + lastname.text;
@@ -398,9 +391,10 @@ class _RegisterPageState extends State<MyStatefulWidget>  {
                         userModel.role = role;
                         userModel.admin = admin;
                         userModel.university = university.text;
-                        userModel.birthdate = birthdate.selectedDate.millisecondsSinceEpoch;
-                        print(birthdate.selectedDate);
-                        userAdapter.signUp(email.text, password.text, userModel, context);
+                        userModel.birthdate =
+                            birthdate.selectedDate.millisecondsSinceEpoch;
+                        userAdapter.signUp(
+                            email.text, password.text, userModel, context);
                       },
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),

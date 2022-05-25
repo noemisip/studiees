@@ -8,7 +8,7 @@ Future showErrorMessage (BuildContext context, String text) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: MyColors.dialogcolor,
+          backgroundColor: MyColors.dialogColor,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -29,7 +29,7 @@ Future showErrorMessage (BuildContext context, String text) {
                     Navigator.of(context).pop();
                   },
                   padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                  borderRadius: const BorderRadius.all(const Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
               ],
             ),

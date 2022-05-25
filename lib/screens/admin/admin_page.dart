@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +7,6 @@ import 'package:stud_iees/adapter/user_adapter.dart';
 import '../../adapter/semester_adapter.dart';
 import '../../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import '../../entities/semester.dart';
 import '../../entities/user.dart';
 
@@ -75,7 +73,7 @@ class _AdminPageState extends State<AdminPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
@@ -86,8 +84,9 @@ class _AdminPageState extends State<AdminPage> {
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
                               width: 100,
@@ -191,9 +190,9 @@ class _AdminPageState extends State<AdminPage> {
                         child: CupertinoButton(
                           child: const Text(
                             "Ok",
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                           ),
-                          color: Colors.white,
+                          color: MyColors.tabBarColor,
                           onPressed: () {
                             SemesterModel newSemester = SemesterModel(
                                 semester: startYear.text + "/" + endYear.text + "/" + number.text);
@@ -205,7 +204,7 @@ class _AdminPageState extends State<AdminPage> {
                             );
                           },
                           padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                          borderRadius: BorderRadius.all(const Radius.circular(20)),
+                          borderRadius: const BorderRadius.all(const Radius.circular(20)),
                         ),
                       ),
                     ],

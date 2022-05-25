@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
 import 'package:stud_iees/entities/subject.dart';
 import 'package:stud_iees/screens/selected_subject_page.dart';
-import 'package:stud_iees/screens/student/signed_subjects_page.dart';
-import 'package:stud_iees/screens/teacher/new_quiz.dart';
 import 'package:stud_iees/widget/loading_indicator.dart';
 import 'package:stud_iees/widget/my_picker_semester.dart';
 import 'package:stud_iees/widget/my_text.dart';
@@ -20,11 +17,9 @@ import '../widget/rounded_shadow_view.dart';
 class SubjectPage extends StatefulWidget {
   const SubjectPage({Key? key}) : super(key: key);
 
-
   @override
   _SubjectPageState createState() => _SubjectPageState();
 }
-
 
 class _SubjectPageState extends State<SubjectPage> {
   User? user = FirebaseAuth.instance.currentUser;
@@ -34,22 +29,20 @@ class _SubjectPageState extends State<SubjectPage> {
   UserAdapter userAdapter = UserAdapter();
 
   @override
-   initState()  {
+  initState() {
     super.initState();
     userAdapter = context.read<UserAdapter>();
     subjectAdapter = context.read<SubjectAdapter>();
-    userAdapter.getCurrentUser(context).whenComplete((){
+    userAdapter.getCurrentUser(context).whenComplete(() {
       loggedInUser = userAdapter.currentUser;
       setState(() {
-        if(loggedInUser.role == true){
+        if (loggedInUser.role == true) {
           subjectAdapter.getSubjectsById(loggedInUser.uid!);
-        }
-        else if ( loggedInUser.role == false){
+        } else if (loggedInUser.role == false) {
           subjectAdapter.getSubjectsByUniversity(loggedInUser);
         }
       });
     });
-
   }
 
   @override
@@ -75,22 +68,27 @@ class _SubjectPageState extends State<SubjectPage> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [MyColors.background1, MyColors.background2])),
-        child:  Column(
+        child: Column(
           children: [
-            MyPicker("",signedup: false),
+            MyPicker("", signedUp: false, all: true),
             Expanded(
               child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                      body: Consumer<SubjectAdapter>(
-                        builder: (context, subjectAdapter,child) => subjectAdapter.ended == false
-                            ? const LoadingIndicator()
-                            : ListView.builder(
-                            itemCount: subjectAdapter.subjects.length ?? 0,
-                            padding: const EdgeInsets.all(20),
-                            itemBuilder: (context, index) =>
-                                SubjectItem(subject: subjectAdapter.subjects[index], function: "+",currloggedInUser: loggedInUser, subjectAdapter: subjectAdapter,)),
-                      ),
-                    ),
+                backgroundColor: Colors.transparent,
+                body: Consumer<SubjectAdapter>(
+                  builder: (context, subjectAdapter, child) =>
+                      subjectAdapter.ended == false
+                          ? const LoadingIndicator()
+                          : ListView.builder(
+                              itemCount: subjectAdapter.subjects.length,
+                              padding: const EdgeInsets.all(20),
+                              itemBuilder: (context, index) => SubjectItem(
+                                    subject: subjectAdapter.subjects[index],
+                                    function: "+",
+                                    currLoggedInUser: loggedInUser,
+                                    subjectAdapter: subjectAdapter,
+                                  )),
+                ),
+              ),
             ),
           ],
         ),
@@ -100,20 +98,27 @@ class _SubjectPageState extends State<SubjectPage> {
 }
 
 class SubjectItem extends StatelessWidget {
-  const SubjectItem({Key? key, required this.currloggedInUser, required this.subject, required this.function, required this.subjectAdapter}) : super(key: key);
+  const SubjectItem(
+      {Key? key,
+      required this.currLoggedInUser,
+      required this.subject,
+      required this.function,
+      required this.subjectAdapter})
+      : super(key: key);
 
   final SubjectModel subject;
   final String function;
-  final UserModel currloggedInUser;
+  final UserModel currLoggedInUser;
   final SubjectAdapter subjectAdapter;
-
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
-      onTap: (){
-          showDialog(context: context, builder: (context) => SelectedSubject(selectedSubject: subject, function: function));
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) =>
+                SelectedSubject(selectedSubject: subject, function: function));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -123,35 +128,39 @@ class SubjectItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(child: MyText(text: subject.name ?? "")),
-              MyText(text: subject.credit.toString() +" " + tr("credit")),
+              MyText(text: subject.credit.toString() + " " + tr("credit")),
               MyText(
-                  text: subject.current_part.toString() +
+                  text: subject.currentPart.toString() +
                       "/" +
                       subject.limit.toString()),
-              if(currloggedInUser.role == false) Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: CupertinoButton(
-                      child: Text( function,
-                        style: TextStyle(
-                            color: MyColors.background1, fontWeight: FontWeight.w600),
+              if (currLoggedInUser.role == false)
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: CupertinoButton(
+                        child: Text(
+                          function,
+                          style: TextStyle(
+                              color: MyColors.background1,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        color: Colors.white,
+                        onPressed: () {
+                          if (function == "+") {
+                            subjectAdapter.signUpSubject(subject, context);
+                          }
+                          if (function == "-") {
+                            subjectAdapter.signDownSubject(subject, context);
+                          }
+                        },
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
                       ),
-                      color: Colors.white,
-                      onPressed: () {
-                        if( function == "+"){
-                          subjectAdapter.signUpSubject(subject, context);
-                        }
-                        if( function == "-"){
-                          subjectAdapter.signDownSubject(subject, context);
-                        }
-                      },
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
             ],
           ),
         ),
@@ -159,4 +168,3 @@ class SubjectItem extends StatelessWidget {
     );
   }
 }
-

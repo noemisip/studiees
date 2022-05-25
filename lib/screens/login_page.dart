@@ -1,5 +1,3 @@
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stud_iees/helpers/picturehelper.dart';
@@ -17,7 +15,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  User? user = FirebaseAuth.instance.currentUser;
   var email = TextEditingController();
   var password = TextEditingController();
   UserAdapter userAdapter = UserAdapter();
@@ -169,14 +166,16 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           tr("login"),
                           style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
+                              color: Colors.white, fontWeight: FontWeight.w600),
                         ),
-                        color: Colors.white,
+                        color: MyColors.tabBarColor,
                         onPressed: () {
-                         userAdapter.signIn(email.text, password.text,context);
+                          userAdapter.signIn(
+                              email.text, password.text, context);
                         },
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        borderRadius: const BorderRadius.all(Radius.circular(20)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
                       ),
                     ),
                     Text(tr("or"),
@@ -190,15 +189,16 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           tr("register"),
                           style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
+                              color: Colors.white, fontWeight: FontWeight.w600),
                         ),
-                        color: Colors.white,
+                        color: MyColors.tabBarColor,
                         onPressed: () {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               AppRouter.register, (route) => false);
                         },
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        borderRadius: const BorderRadius.all(Radius.circular(20)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
                       ),
                     )
                   ],
@@ -210,5 +210,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     ));
   }
-
 }

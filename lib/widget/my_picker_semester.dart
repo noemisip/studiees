@@ -12,16 +12,15 @@ import 'my_text.dart';
 class MyPicker extends StatefulWidget {
 
   late String semesterValue;
-  final bool signedup;
-  MyPicker(this.semesterValue, {Key? key, required this.signedup}) : super(key: key);
-
+  final bool all;
+  final bool signedUp;
+  MyPicker(this.semesterValue, {Key? key, required this.signedUp, required this.all}) : super(key: key);
 
   @override
   _MyPickerState createState()
   {
     return _MyPickerState();
   }
-
 }
 
 class _MyPickerState extends State<MyPicker> {
@@ -62,8 +61,8 @@ class _MyPickerState extends State<MyPicker> {
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         borderRadius: const BorderRadius.all(Radius.circular(20)),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                      if( widget.all == true )Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: CupertinoButton(
                           child: Text( tr("all"),
                             style: TextStyle(
@@ -76,13 +75,12 @@ class _MyPickerState extends State<MyPicker> {
                               if(userAdapter.currentUser.role == true){
                                subjectAdapter.getSubjectsById(userAdapter.currentUser.uid!);
                               } else{
-                                if(widget.signedup == true){
+                                if(widget.signedUp == true){
                                   subjectAdapter.getSubjectsBySignedUp(userAdapter.currentUser);
                                 } else{
                                   subjectAdapter.getSubjectsByUniversity(userAdapter.currentUser);
                                 }
                               }
-
                             });
 
                           },
@@ -92,7 +90,6 @@ class _MyPickerState extends State<MyPicker> {
                       ),
                     ],
                   ),
-
                 ),
                MyText( text: widget.semesterValue),
               ]
@@ -117,7 +114,7 @@ class _MyPickerState extends State<MyPicker> {
                   if(userAdapter.currentUser.role == true){
                     subjectAdapter.getSubjectsByIdBySemester(userAdapter.currentUser);
                   } else {
-                    if( widget.signedup == true){
+                    if( widget.signedUp == true){
                       subjectAdapter.getSubjectsBySignedUpBySemester(userAdapter.currentUser, userAdapter.currentUser.currentSemester!);
                     }
                     subjectAdapter.getSubjectsBySemester(userAdapter.currentUser);

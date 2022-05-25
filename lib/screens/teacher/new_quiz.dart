@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -12,12 +10,9 @@ import 'package:stud_iees/screens/teacher/new_question.dart';
 import '../../adapter/quiz_adapter.dart';
 import '../../colors.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import '../../entities/quiz.dart';
 import '../../entities/user.dart';
-import '../../widget/loading_indicator.dart';
 import '../../widget/my_date.dart';
-import '../../widget/my_picker_semester.dart';
 import '../../widget/my_picker_type.dart';
 
 class NewQuizPage extends StatefulWidget {
@@ -33,9 +28,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
   var time = TextEditingController();
   var deadline = SelectedDate();
 
-  User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-  String? errorMessage;
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
   QuizAdapter quizAdapter = QuizAdapter();
@@ -47,20 +40,16 @@ class _NewQuizPageState extends State<NewQuizPage> {
   int grade3 = 50;
   int grade4 = 60;
   int grade5 = 80;
-
   int maxPoints = 0;
 
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance
-        .collection("Users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-      quizAdapter = context.read<QuizAdapter>();
-      questionAdapter = context.read<QuestionAdapter>();
+    userAdapter = context.read<UserAdapter>();
+    quizAdapter = context.read<QuizAdapter>();
+    questionAdapter = context.read<QuestionAdapter>();
+    userAdapter.getCurrentUser(context).whenComplete(() {
+      loggedInUser = userAdapter.currentUser;
       setState(() {});
     });
   }
@@ -195,7 +184,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                             ),
                             NumberPicker(
                               itemWidth: 70,
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
@@ -220,7 +209,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                             ),
                             NumberPicker(
                               itemWidth: 70,
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
@@ -245,7 +234,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                             ),
                             NumberPicker(
                               itemWidth: 70,
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
@@ -270,7 +259,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                             ),
                             NumberPicker(
                               itemWidth: 70,
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
@@ -288,8 +277,8 @@ class _NewQuizPageState extends State<NewQuizPage> {
                           ],
                         ),
                       ),
-                       Padding(
-                        padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                         child: MyDate(selectedDate: deadline),
                       ),
                       Row(
@@ -325,27 +314,28 @@ class _NewQuizPageState extends State<NewQuizPage> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20)),
                       ),
-                        SizedBox(
+                      SizedBox(
                         height: 60,
                         child: Consumer<QuestionAdapter>(
                           builder: (context, questionAdapter, child) =>
-                             ListView.builder(
+                              ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: questionAdapter.questions.length,
                                   padding: const EdgeInsets.all(20),
                                   itemBuilder: (context, index) => Row(
-                                    children: [
-                                      Text((index+1).toString(), style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w700)),
-                                      const Icon(
+                                        children: [
+                                          Text((index + 1).toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700)),
+                                          const Icon(
                                             Icons.adjust,
                                             color: Colors.white,
                                             size: 30.0,
                                           ),
-                                    ],
-                                  )),
+                                        ],
+                                      )),
                         ),
                       ),
                       Padding(
@@ -354,10 +344,10 @@ class _NewQuizPageState extends State<NewQuizPage> {
                           child: const Text(
                             "Ok",
                             style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.w600),
                           ),
-                          color: Colors.white,
+                          color: MyColors.tabBarColor,
                           onPressed: () {
                             quizModel.time = int.parse(time.text);
                             quizModel.name = name.text;
@@ -379,7 +369,6 @@ class _NewQuizPageState extends State<NewQuizPage> {
                             }
                             quizModel.questions = temp2;
                             quizModel.maxPoints = maxPoints;
-
                             quizAdapter
                                 .addQuiz(quizModel, context)
                                 .whenComplete(() {
@@ -391,7 +380,7 @@ class _NewQuizPageState extends State<NewQuizPage> {
                           },
                           padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                           borderRadius:
-                              BorderRadius.all(const Radius.circular(20)),
+                              const BorderRadius.all(Radius.circular(20)),
                         ),
                       ),
                     ],

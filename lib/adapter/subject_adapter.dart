@@ -13,90 +13,113 @@ class SubjectAdapter extends ChangeNotifier {
   List<QuizModel> quizes = [];
   SubjectModel currSubj = SubjectModel();
 
-
-  Future<void> getCurrSubjectById (String sid) async{
+  Future<void> getCurrSubjectById(String sid) async {
     ended = false;
-    await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: sid).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+    await firebaseFirestore
+        .collection("Subjects")
+        .where("sid", isEqualTo: sid)
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
         SubjectModel model = SubjectModel.fromMap(result);
         currSubj = model;
-      });
+      }
     });
-    print("adapter"+ currSubj.name!);
     notifyListeners();
     ended = true;
   }
 
-  Future<void> getSubjectsById( String id) async {
-     ended = false;
+  Future<void> getSubjectsById(String id) async {
+    ended = false;
     List<SubjectModel> temp = [];
-    await firebaseFirestore.collection("Subjects").where("tid", isEqualTo: id).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+    await firebaseFirestore
+        .collection("Subjects")
+        .where("tid", isEqualTo: id)
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
-      });
+      }
     });
     subjects = temp;
     notifyListeners();
-     ended = true;
+    ended = true;
   }
 
-
-  Future<void> getSubjectsByIdBySemester( UserModel user) async {
-     ended = false;
+  Future<void> getSubjectsByIdBySemester(UserModel user) async {
+    ended = false;
     List<SubjectModel> temp = [];
-    await firebaseFirestore.collection("Subjects").where("tid", isEqualTo: user.uid).where("semester", isEqualTo: user.currentSemester).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+    await firebaseFirestore
+        .collection("Subjects")
+        .where("tid", isEqualTo: user.uid)
+        .where("semester", isEqualTo: user.currentSemester)
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
-      });
+      }
     });
     subjects = temp;
     notifyListeners();
-     ended = true;
+    ended = true;
   }
 
-  Future<void> getSubjectsBySemester( UserModel user) async {
-     ended = false;
+  Future<void> getSubjectsBySemester(UserModel user) async {
+    ended = false;
     List<SubjectModel> temp = [];
-    await firebaseFirestore.collection("Subjects").where("university", isEqualTo: user.university).where("semester", isEqualTo: user.currentSemester).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+    await firebaseFirestore
+        .collection("Subjects")
+        .where("university", isEqualTo: user.university)
+        .where("semester", isEqualTo: user.currentSemester)
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
-      });
+      }
     });
     subjects = temp;
     notifyListeners();
-     ended = true;
+    ended = true;
   }
 
-  Future<void> getSubjectsByUniversity( UserModel user) async {
-     ended = false;
+  Future<void> getSubjectsByUniversity(UserModel user) async {
+    ended = false;
     List<SubjectModel> temp = [];
-    await firebaseFirestore.collection("Subjects").where("university", isEqualTo: user.university).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+    await firebaseFirestore
+        .collection("Subjects")
+        .where("university", isEqualTo: user.university)
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
         SubjectModel model = SubjectModel.fromMap(result);
         temp.add(model);
-      });
+      }
     });
     subjects = temp;
     notifyListeners();
-     ended = true;
+    ended = true;
   }
 
-  Future<void> getSubjectsBySignedUp( UserModel user) async {
+  Future<void> getSubjectsBySignedUp(UserModel user) async {
     ended = false;
     List<String>? signedUpSubjects = [];
     signedUpSubjects = user.subjects;
     List<SubjectModel> temp = [];
 
-    if( signedUpSubjects != null){
-      for( var subject in signedUpSubjects){
-        await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: subject).get().then((value) {
-          value.docs.forEach((result) {
+    if (signedUpSubjects != null) {
+      for (var subject in signedUpSubjects) {
+        await firebaseFirestore
+            .collection("Subjects")
+            .where("sid", isEqualTo: subject)
+            .get()
+            .then((value) {
+          for (var result in value.docs) {
             SubjectModel model = SubjectModel.fromMap(result);
             temp.add(model);
-          });
+          }
         });
       }
       subjects = temp;
@@ -105,39 +128,48 @@ class SubjectAdapter extends ChangeNotifier {
     ended = true;
   }
 
-  Future<void> getSubjectsBySignedUpBySemester ( UserModel user, String semester) async{
+  Future<void> getSubjectsBySignedUpBySemester(
+      UserModel user, String semester) async {
     ended = false;
     List<String>? signedUpSubjects = [];
     signedUpSubjects = user.subjects;
     List<SubjectModel> temp = [];
 
-    if( signedUpSubjects != null){
-      for( var subject in signedUpSubjects){
-        await firebaseFirestore.collection("Subjects").where("sid", isEqualTo: subject).where("semester", isEqualTo: semester).get().then((value) {
-          value.docs.forEach((result) {
+    if (signedUpSubjects != null) {
+      for (var subject in signedUpSubjects) {
+        await firebaseFirestore
+            .collection("Subjects")
+            .where("sid", isEqualTo: subject)
+            .where("semester", isEqualTo: semester)
+            .get()
+            .then((value) {
+          for (var result in value.docs) {
             SubjectModel model = SubjectModel.fromMap(result);
             temp.add(model);
-          });
+          }
         });
       }
       subjects = temp;
     }
     notifyListeners();
     ended = true;
-
   }
 
-  Future<void> getAllTasks(UserModel user) async{
+  Future<void> getAllTasks(UserModel user) async {
     ended = false;
     await getSubjectsBySignedUp(user);
     List<QuizModel> temp = [];
 
-    for( var subject in subjects){
-      await firebaseFirestore.collection("Quizes").where("subjid", isEqualTo: subject.sid).get().then((value) {
-        value.docs.forEach((result) {
+    for (var subject in subjects) {
+      await firebaseFirestore
+          .collection("Quizes")
+          .where("subjid", isEqualTo: subject.sid)
+          .get()
+          .then((value) {
+        for (var result in value.docs) {
           QuizModel model = QuizModel.fromMap(result);
           temp.add(model);
-        });
+        }
       });
       quizes = temp;
     }
@@ -145,59 +177,60 @@ class SubjectAdapter extends ChangeNotifier {
     ended = true;
   }
 
-  Future changeSubject (SubjectModel subject, BuildContext context) async{
-    FirebaseFirestore.instance.collection("Subjects").doc(subject.sid).update(
-        subject.toMap()
-    );
+  Future changeSubject(SubjectModel subject, BuildContext context) async {
+    FirebaseFirestore.instance
+        .collection("Subjects")
+        .doc(subject.sid)
+        .update(subject.toMap());
     notifyListeners();
   }
 
-  Future<void> signUpSubject( SubjectModel subject, BuildContext context) async{
-
-    int count = subject.current_part ?? 0;
+  Future<void> signUpSubject(SubjectModel subject, BuildContext context) async {
+    int count = subject.currentPart ?? 0;
     userAdapter.getCurrentUser(context).whenComplete(() {
       bool alreadySignedUp;
-      if(userAdapter.currentUser.subjects != null){
-        alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
-      }
-      else{
+      if (userAdapter.currentUser.subjects != null) {
+        alreadySignedUp =
+            userAdapter.currentUser.subjects!.contains(subject.sid);
+      } else {
         alreadySignedUp = false;
       }
-      if( subject.limit! > count && !alreadySignedUp){
+      if (subject.limit! > count && !alreadySignedUp) {
         count++;
-        subject.current_part = count;
-        print(subject.current_part);
+        subject.currentPart = count;
         changeSubject(subject, context);
-        userAdapter.addSubjectToUser(userAdapter.currentUser, subject.sid!, context);
+        userAdapter.addSubjectToUser(
+            userAdapter.currentUser, subject.sid!, context);
       }
     });
     notifyListeners();
   }
 
-  Future<void> signDownSubject( SubjectModel subject, BuildContext context) async{
-    int count = subject.current_part ?? 0;
+  Future<void> signDownSubject(
+      SubjectModel subject, BuildContext context) async {
+    int count = subject.currentPart ?? 0;
     userAdapter.getCurrentUser(context).whenComplete(() async {
-      bool alreadySignedUp = userAdapter.currentUser.subjects!.contains(subject.sid);
-      if(alreadySignedUp){
+      bool alreadySignedUp =
+          userAdapter.currentUser.subjects!.contains(subject.sid);
+      if (alreadySignedUp) {
         count--;
-        subject.current_part = count;
+        subject.currentPart = count;
         await changeSubject(subject, context);
-        print("**");
-        print(userAdapter.currentUser.subjects);
-        await userAdapter.removeSubjectFromUser(userAdapter.currentUser, subject.sid!, context).whenComplete(() => getSubjectsBySignedUp(userAdapter.currentUser));
+        await userAdapter
+            .removeSubjectFromUser(
+                userAdapter.currentUser, subject.sid!, context)
+            .whenComplete(() => getSubjectsBySignedUp(userAdapter.currentUser));
       }
     });
     notifyListeners();
   }
 
-  Future<void> addSubject(SubjectModel subject, BuildContext context) async{
-    DocumentReference docRef = await firebaseFirestore.collection('Subjects').add(subject.toMap());
+  Future<void> addSubject(SubjectModel subject, BuildContext context) async {
+    DocumentReference docRef =
+        await firebaseFirestore.collection('Subjects').add(subject.toMap());
     subject.sid = docRef.id;
     changeSubject(subject, context);
     getSubjectsById(subject.tid!);
     notifyListeners();
   }
 }
-
-
-

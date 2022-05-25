@@ -6,9 +6,9 @@ class MyText extends StatelessWidget {
 
   String text;
   double padding;
-  double fontsize;
+  double fontSize;
   Color color;
-  FontWeight fontweight;
+  FontWeight fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,9 @@ class MyText extends StatelessWidget {
      padding: EdgeInsets.all(padding),
      child: Text(text,
          style: TextStyle(
-             fontSize: fontsize,
+             fontSize: fontSize,
              color: Colors.white,
-             fontWeight: fontweight)),
+             fontWeight: fontWeight)),
    );
   }
 
@@ -26,8 +26,8 @@ class MyText extends StatelessWidget {
       {Key? key,
         this.text = "",
         this.padding = 10,
-        this.fontsize = 20,
+        this.fontSize = 20,
         this.color = Colors.white,
-        this.fontweight = FontWeight.w400}) : super(key: key);
+        this.fontWeight = FontWeight.w400}) : super(key: key);
 
 }

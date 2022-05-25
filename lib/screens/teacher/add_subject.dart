@@ -1,5 +1,3 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../entities/user.dart';
 import '../../widget/my_picker_semester.dart';
 
-
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
 
@@ -22,44 +19,43 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-
   var name = TextEditingController();
   var limit = TextEditingController();
   var credit = TextEditingController();
-  //var semester = TextEditingController();
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   String? errorMessage;
   SubjectAdapter subjectAdapter = SubjectAdapter();
   UserAdapter userAdapter = UserAdapter();
-  var semesterPicker = MyPicker("", signedup: false);
-
+  var semesterPicker = MyPicker("", signedUp: false, all: false);
 
   @override
   void initState() {
     super.initState();
     userAdapter = context.read<UserAdapter>();
-    userAdapter.getCurrentUser(context).whenComplete((){
+    userAdapter.getCurrentUser(context).whenComplete(() {
       loggedInUser = userAdapter.currentUser;
-      setState(() {
-      });
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:  AppBar(
-        backgroundColor: MyColors.background1,
-        centerTitle: true,
-        title: Text(tr('add_subject'),
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w800)),
-        leading: CupertinoButton(
-            onPressed: () {
-              userAdapter.logout(context);
-            },
-            child: const Icon(Icons.logout, color: Colors.white,))),
+        appBar: AppBar(
+            backgroundColor: MyColors.background1,
+            centerTitle: true,
+            title: Text(tr('add_subject'),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w800)),
+            leading: CupertinoButton(
+                onPressed: () {
+                  userAdapter.logout(context);
+                },
+                child: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ))),
         body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -81,8 +77,10 @@ class _AddPageState extends State<AddPage> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                             child: Text(tr("name"),
-                                style:
-                                const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
@@ -95,7 +93,8 @@ class _AddPageState extends State<AddPage> {
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: MyColors.background1, width: 2.0),
+                                borderSide: BorderSide(
+                                    color: MyColors.background1, width: 2.0),
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                               enabledBorder: OutlineInputBorder(
@@ -119,20 +118,24 @@ class _AddPageState extends State<AddPage> {
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Text(tr("semester"),
-                                style:
-                                const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
-                     semesterPicker,
+                      semesterPicker,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Text(tr("credit"),
-                                style:
-                                const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
@@ -140,13 +143,14 @@ class _AddPageState extends State<AddPage> {
                         padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                         child: TextFormField(
                           controller: credit,
-                            keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: MyColors.background1, width: 2.0),
+                                borderSide: BorderSide(
+                                    color: MyColors.background1, width: 2.0),
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                               enabledBorder: OutlineInputBorder(
@@ -170,8 +174,10 @@ class _AddPageState extends State<AddPage> {
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Text(tr("limit"),
-                                style:
-                                const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500)),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
@@ -179,13 +185,14 @@ class _AddPageState extends State<AddPage> {
                         padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                         child: TextFormField(
                           controller: limit,
-                            keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: MyColors.background1, width: 2.0),
+                                borderSide: BorderSide(
+                                    color: MyColors.background1, width: 2.0),
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                               enabledBorder: OutlineInputBorder(
@@ -208,29 +215,33 @@ class _AddPageState extends State<AddPage> {
                         child: CupertinoButton(
                           child: const Text(
                             "Ok",
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
-                          color: Colors.white,
+                          color: MyColors.tabBarColor,
                           onPressed: () {
-
                             SubjectModel subjectModel = SubjectModel();
                             subjectModel.credit = int.parse(credit.text);
                             subjectModel.limit = int.parse(limit.text);
                             subjectModel.tid = loggedInUser.uid;
                             subjectModel.name = name.text;
                             subjectModel.university = loggedInUser.university;
-                            subjectModel.current_part = 0;
-                            subjectModel.semester = semesterPicker.semesterValue;
+                            subjectModel.currentPart = 0;
+                            subjectModel.semester =
+                                semesterPicker.semesterValue;
 
-                            subjectAdapter.addSubject(subjectModel, context).whenComplete(() {
-                            credit.clear();
-                            limit.clear();
-                            name.clear();
+                            subjectAdapter
+                                .addSubject(subjectModel, context)
+                                .whenComplete(() {
+                              credit.clear();
+                              limit.clear();
+                              name.clear();
                             });
-
                           },
                           padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                          borderRadius: BorderRadius.all(const Radius.circular(20)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
                         ),
                       ),
                     ],

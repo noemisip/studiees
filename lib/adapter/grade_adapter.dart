@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-
 import '../entities/grade.dart';
-import '../entities/user.dart';
 
 class GradeAdapter extends ChangeNotifier{
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  GradeModel currgrade = GradeModel();
+  GradeModel currGrade = GradeModel();
   List<int> grades = [];
   List<String> userIds = [];
-  List<GradeModel> allgrades = [];
+  List<GradeModel> allGrades = [];
   bool ended = false;
 
   Future<void> addGrade(GradeModel grade, BuildContext context) async{
@@ -33,30 +29,27 @@ class GradeAdapter extends ChangeNotifier{
     grades.clear();
 
     await firebaseFirestore.collection("Grades").where("uid", isEqualTo: uid).where("qid", isEqualTo: qid).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        currgrade = GradeModel.fromMap(result);
-        grades.add(currgrade.grade!);
-        userIds.add(currgrade.uid!);
-        print("currgrade" + currgrade.grade.toString());
-      });
+      for (var result in querySnapshot.docs) {
+        currGrade = GradeModel.fromMap(result);
+        grades.add(currGrade.grade!);
+        userIds.add(currGrade.uid!);
+      }
     });
-    print("length" + grades.length.toString());
     notifyListeners();
     ended = true;
   }
 
   Future<void> getGradeByUid ( String uid,BuildContext context) async{
     ended = false;
-    allgrades.clear();
+    allGrades.clear();
 
     await firebaseFirestore.collection("Grades").where("uid", isEqualTo: uid).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        currgrade = GradeModel.fromMap(result);
-        allgrades.add(currgrade);
-      });
+      for (var result in querySnapshot.docs) {
+        currGrade = GradeModel.fromMap(result);
+        allGrades.add(currGrade);
+      }
     });
     notifyListeners();
-    print(allgrades);
     ended = true;
   }
 
@@ -66,12 +59,12 @@ class GradeAdapter extends ChangeNotifier{
     List<GradeModel> temp = [];
 
     await firebaseFirestore.collection("Grades").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+      for (var result in querySnapshot.docs) {
         GradeModel model = GradeModel.fromMap(result);
         temp.add(model);
-      });
+      }
     });
-    allgrades = temp;
+    allGrades = temp;
     notifyListeners();
     ended = true;
   }

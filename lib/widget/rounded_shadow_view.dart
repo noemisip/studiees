@@ -12,18 +12,18 @@ class RoundedShadowView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(this.cornerRadius),
-        color: this.backgroundColor,
+        borderRadius: BorderRadius.circular(cornerRadius),
+        color: backgroundColor,
         boxShadow: [
            BoxShadow(
-              color: Colors.black.withAlpha((this.shadowOpacity * 255).toInt()),
-              blurRadius: this.shadowRadius,
-              offset: this.shadowOffset)
+              color: Colors.black.withAlpha((shadowOpacity * 255).toInt()),
+              blurRadius: shadowRadius,
+              offset: shadowOffset)
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(this.cornerRadius)),
-        child: this.child == null ? Container() : this.child,
+        borderRadius: BorderRadius.all(Radius.circular(cornerRadius)),
+        child: child ?? Container(),
       ),
     );
   }

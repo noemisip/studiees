@@ -10,7 +10,7 @@ class LoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.center,
-        child: Padding(
+        child: const Padding(
           padding: EdgeInsets.all(8),
           child: CupertinoActivityIndicator(),
         ));

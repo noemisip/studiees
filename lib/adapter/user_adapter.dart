@@ -13,17 +13,17 @@ class UserAdapter extends ChangeNotifier {
   List<UserModel> users = [];
   late UserModel currentUser;
   List<String> subjects = [];
-   UserModel subjTeacher = UserModel();
-   bool loading = false;
+  UserModel subjTeacher = UserModel();
+  bool loading = false;
 
   Future<void> getUsers() async {
     List<UserModel> temp = [];
 
     await firebaseFirestore.collection("Users").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+      for (var result in querySnapshot.docs) {
         UserModel model = UserModel.fromMap(result);
         temp.add(model);
-      });
+      }
     });
     users = temp;
     notifyListeners();
@@ -46,7 +46,7 @@ class UserAdapter extends ChangeNotifier {
 
   Future<void> getCurrentUser(BuildContext context) async {
     loading = false;
-    User? user =  _auth.currentUser;
+    User? user = _auth.currentUser;
     if (user != null) {
       UserModel loggedInUser = UserModel();
       await FirebaseFirestore.instance
@@ -62,38 +62,49 @@ class UserAdapter extends ChangeNotifier {
     loading = true;
   }
 
-  Future<void> getTeacherById( String tid,BuildContext context) async{
-    await firebaseFirestore.collection("Users").where("uid", isEqualTo: tid).get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-      subjTeacher = UserModel.fromMap(result);
-      });
+  Future<void> getTeacherById(String tid, BuildContext context) async {
+    await firebaseFirestore
+        .collection("Users")
+        .where("uid", isEqualTo: tid)
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
+        subjTeacher = UserModel.fromMap(result);
+      }
     });
     notifyListeners();
   }
 
-  void changeCurrentSemester(UserModel user, BuildContext context){
-    FirebaseFirestore.instance.collection("Users").doc(user.uid).update(
-      user.toMap()
-    );
+  void changeCurrentSemester(UserModel user, BuildContext context) {
+    FirebaseFirestore.instance
+        .collection("Users")
+        .doc(user.uid)
+        .update(user.toMap());
     notifyListeners();
   }
 
-  Future<void> addSubjectToUser(UserModel user, String sid, BuildContext context) async{
+  Future<void> addSubjectToUser(
+      UserModel user, String sid, BuildContext context) async {
     subjects.add(sid);
     user.subjects?.add(sid);
-    await firebaseFirestore.collection("Users").doc(user.uid).update({"subjects": FieldValue.arrayUnion(subjects)});
+    await firebaseFirestore
+        .collection("Users")
+        .doc(user.uid)
+        .update({"subjects": FieldValue.arrayUnion(subjects)});
     notifyListeners();
   }
 
-  Future<void> removeSubjectFromUser(UserModel user, String sid, BuildContext context) async{
+  Future<void> removeSubjectFromUser(
+      UserModel user, String sid, BuildContext context) async {
     subjects.remove(sid);
     user.subjects?.remove(sid);
     List<String> removeable = [];
     removeable.add(sid);
-    await firebaseFirestore.collection("Users").doc(user.uid).update({
-      'subjects': FieldValue.arrayRemove(removeable)});
+    await firebaseFirestore
+        .collection("Users")
+        .doc(user.uid)
+        .update({'subjects': FieldValue.arrayRemove(removeable)});
     notifyListeners();
-    print(subjects);
   }
 
   void signIn(String email, String password, BuildContext context) async {
@@ -102,24 +113,20 @@ class UserAdapter extends ChangeNotifier {
           .signInWithEmailAndPassword(email: email, password: password)
           .whenComplete(() => getCurrentUser(context))
           .then((uid) {
-        if( currentUser.admin == true)
-        {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRouter.admin, (route) => false);
-        } else
-        if (currentUser.role == true) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRouter.teacher_home, (route) => false);
-        } else
-        if (currentUser.role == false) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRouter.student_home, (route) => false);
+        if (currentUser.admin == true) {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(AppRouter.admin, (route) => false);
+        } else if (currentUser.role == true) {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(AppRouter.teacherHome, (route) => false);
+        } else if (currentUser.role == false) {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(AppRouter.studentHome, (route) => false);
         }
       });
     } on FirebaseAuthException catch (error) {
       chooseErrorMessage(error.code);
       showErrorMessage(context, errorMessage!);
-      print(error.code);
     }
   }
 
@@ -141,8 +148,8 @@ class UserAdapter extends ChangeNotifier {
             .pushNamedAndRemoveUntil(AppRouter.login, (route) => false));
   }
 
-  String? chooseErrorMessage( String error){
-    switch(error){
+  String? chooseErrorMessage(String error) {
+    switch (error) {
       case "invalid-email":
         errorMessage = tr("invalid-email");
         return errorMessage;

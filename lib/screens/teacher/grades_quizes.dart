@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,50 +11,42 @@ import '../../widget/my_text.dart';
 import '../../widget/rounded_shadow_view.dart';
 
 class GradePage extends StatefulWidget {
-  const GradePage( {Key? key, required this.selectedQuiz}) : super(key: key);
+  const GradePage({Key? key, required this.selectedQuiz}) : super(key: key);
 
   final QuizModel selectedQuiz;
 
   @override
-  _QuizModelState createState()
-  {
+  _QuizModelState createState() {
     return _QuizModelState();
   }
 }
 
-class _QuizModelState extends State<GradePage>  {
-
+class _QuizModelState extends State<GradePage> {
   QuizAdapter quizAdapter = QuizAdapter();
   UserAdapter userAdapter = UserAdapter();
   GradeAdapter gradeAdapter = GradeAdapter();
-
   List<String> names = [];
 
   @override
   void initState() {
     super.initState();
-
     userAdapter = context.read<UserAdapter>();
     gradeAdapter = context.read<GradeAdapter>();
-    quizAdapter= context.read<QuizAdapter>();
+    quizAdapter = context.read<QuizAdapter>();
     userAdapter.getUsers();
-    userAdapter.users.forEach((user) {
-      gradeAdapter.getGradeByUidQid(user.uid!, widget.selectedQuiz.id!, context).whenComplete(() {
-        gradeAdapter.userIds.forEach((uid) {
-          if ( uid == user.uid )
-          {
+    for (var user in userAdapter.users) {
+      gradeAdapter
+          .getGradeByUidQid(user.uid!, widget.selectedQuiz.id!, context)
+          .whenComplete(() {
+        for (var uid in gradeAdapter.userIds) {
+          if (uid == user.uid) {
             names.add(user.name!);
-            print("==" + user.name!);
-            setState(() {
-            });
-
+            setState(() {});
           }
-        });
+        }
         quizAdapter.getCurrQuiz(widget.selectedQuiz.id!);
-
       });
-    });
-
+    }
   }
 
   @override
@@ -64,14 +55,17 @@ class _QuizModelState extends State<GradePage>  {
         appBar: AppBar(
             backgroundColor: MyColors.background1,
             centerTitle: true,
-            title: Text(widget.selectedQuiz.name?? "",
+            title: Text(widget.selectedQuiz.name ?? "",
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w800)),
             leading: CupertinoButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Icon(Icons.arrow_back, color: Colors.white,))), //leading: Image.asset(Images.pngImgPath('sun'))),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ))), //leading: Image.asset(Images.pngImgPath('sun'))),
         body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -82,36 +76,42 @@ class _QuizModelState extends State<GradePage>  {
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.transparent,
             body: Container(
-              height:  MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height / 2,
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 body: Consumer<GradeAdapter>(
-                  builder: (context, gradeAdapter,child) => gradeAdapter.ended == false
+                  builder: (context, gradeAdapter, child) => gradeAdapter
+                              .ended ==
+                          false
                       ? const LoadingIndicator()
                       : ListView.builder(
-                      itemCount: gradeAdapter.grades.length,
-                      padding: const EdgeInsets.all(20),
-                      itemBuilder: (context, index) =>
-                          Padding(
+                          itemCount: gradeAdapter.grades.length,
+                          padding: const EdgeInsets.all(20),
+                          itemBuilder: (context, index) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: RoundedShadowView(
                               backgroundColor: MyColors.tabBarColor,
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Expanded(child: MyText( text: names[index])),
-                                      Expanded(child: MyText( text: gradeAdapter.grades[index].toString())),
+                                      Expanded(
+                                          child: MyText(text: names[index])),
+                                      Expanded(
+                                          child: MyText(
+                                              text: gradeAdapter.grades[index]
+                                                  .toString())),
                                     ],
                                   ),
                                 ],
                               ),
                             ),
-                          ),),
+                          ),
+                        ),
                 ),
               ),
-
             ),
           ),
         ));

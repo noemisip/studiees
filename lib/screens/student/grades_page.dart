@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:stud_iees/adapter/grade_adapter.dart';
 import 'package:stud_iees/adapter/quiz_adapter.dart';
 import 'package:stud_iees/adapter/subject_adapter.dart';
-import 'package:stud_iees/entities/grade.dart';
 import '../../adapter/user_adapter.dart';
 import '../../colors.dart';
 import '../../entities/quiz.dart';
@@ -49,25 +48,23 @@ class _QuizModelState extends State<GradesPage> {
     userAdapter.getCurrentUser(context).whenComplete(() {
       loggedInUser = userAdapter.currentUser;
       gradeAdapter.getGradeByUid(loggedInUser.uid!, context).whenComplete(() {
-        gradeAdapter.allgrades.forEach((element) {
+        for (var element in gradeAdapter.allGrades) {
           quizAdapter.getCurrQuiz(element.qid!).whenComplete(() {
             quizes.add(quizAdapter.currQuiz);
-            print(quizAdapter.currQuiz.name);
           }).whenComplete(() {
             subjectAdapter
                 .getCurrSubjectById(quizAdapter.currQuiz.subjid!)
                 .whenComplete(() {
               subjects.add(subjectAdapter.currSubj);
-              print(subjectAdapter.currSubj.name);
-              if (subjects.length == gradeAdapter.allgrades.length &&
-                  quizes.length == gradeAdapter.allgrades.length) {
+              if (subjects.length == gradeAdapter.allGrades.length &&
+                  quizes.length == gradeAdapter.allGrades.length) {
                 setState(() {
                   done = true;
                 });
               }
             });
           });
-        });
+        }
       });
     });
   }
@@ -108,7 +105,7 @@ class _QuizModelState extends State<GradesPage> {
                           false
                       ? const LoadingIndicator()
                       : ListView.builder(
-                          itemCount: gradeAdapter.allgrades.length,
+                          itemCount: gradeAdapter.allGrades.length,
                           padding: const EdgeInsets.all(20),
                           itemBuilder: (context, index) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -131,7 +128,7 @@ class _QuizModelState extends State<GradesPage> {
                                             Expanded(
                                                 child: MyText(
                                                     text: gradeAdapter
-                                                        .allgrades[index].grade
+                                                        .allGrades[index].grade
                                                         .toString())),
                                           ],
                                         )
